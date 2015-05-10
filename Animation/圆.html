@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>圆</title>
+</head>
+
+<body>
+<canvas id="yuan" height="400" width="400"></canvas>
+</body>
+<script type="text/javascript">
+	var canvas = document.getElementById('yuan'),
+		width = canvas.width,
+		height = canvas.height;
+	var context = canvas.getContext('2d');
+	
+	function drawArc(r,s,e,color) {
+
+		var x = width / 2,
+			y = height / 2,
+			radius = !r?150:r,
+			conterClockwise = false;
+
+		context.fillStyle = color;
+
+		context.beginPath();
+		context.moveTo(x, y);
+		context.arc(x, y, radius, s, e, conterClockwise);
+		context.fill();
+	}
+
+	var step = 1,
+		startAngle = 0,
+		endAngle = 0;
+
+	var animation_interval = 33,
+		n = 360;
+
+	var animation = function() {
+		if (step <= n) {
+			endAngle = step * 2 * Math.PI / n;
+			console.log(endAngle);
+			context.clearRect(0,0, width, height);
+
+			drawArc('',startAngle, endAngle,'#690');
+			drawArc(140,startAngle, endAngle, '#fff');
+			step++;
+		} else {
+			clearInterval(animation);
+		}
+	}
+	setInterval(animation, animation_interval);
+</script>
+</html>

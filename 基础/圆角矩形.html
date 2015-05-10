@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>圆角矩形</title>
+</head>
+<body>
+	<canvas id="canvas" width="100" height="100"></canvas>
+</body>
+<script type="text/javascript">
+	CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+		var min_len = Math.min(w, h);
+
+		if (r > min_len /2) r = min_len / 2;
+
+		this.beginPath();
+		this.moveTo(x + r, y);  //(0+5, 0)
+		this.arcTo(x + w, y, x + w, y + h, r); // 0+100, 0, 100, 100, 5
+		this.arcTo(x + w, y + h, x, y + h, r);
+		this.arcTo(x, y + h, x, y, r);
+		this.arcTo(x, y, x + w, y, r);
+		this.closePath();
+		return this;
+	}
+
+	var canvas = document.querySelector('#canvas');
+	var ctx = canvas.getContext('2d');
+
+	var draw = function(obj) {
+		ctx.roundRect(0, 0, 100, 100, 5);
+
+		ctx.fillStyle = '#f00';
+		ctx.fill()
+	}
+
+	draw(this);
+</script>
+</html>

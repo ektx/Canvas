@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>canvas 反转颜色</title>
+	<script type="text/javascript" src="../js/jquery-2.0.3.min.js"></script>
+	<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		var canvas = $('#canvas');
+		var context = canvas.get(0).getContext('2d');
+
+		var _img = new Image();
+		_img.src = '龙猫.jpg';
+
+		$(_img).load(function() {
+			context.drawImage(_img, 0, 0, 441, 492, 0, 0, 300, 300);
+
+			var imageData = context.getImageData(0, 0, canvas.width(), canvas.height());
+			var pixels = imageData.data;
+			var numPixels = pixels.length;
+
+			// 清除画布所有内容
+			context.clearRect(0, 0, canvas.width(), canvas.height());
+
+			for (var i = 0; i < numPixels; i++) {
+				pixels[i * 4] = 255 - pixels[i * 4];
+				pixels[i * 4 + 1] = 255 - pixels[i * 4 + 1];
+				pixels[i * 4 + 2] = 255 - pixels[i * 4 + 2];
+
+			}
+
+			context.putImageData(imageData, 0, 0)
+
+		});
+
+	});
+	</script>
+	
+	<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		var canvas = $('#canvas2');
+		var context = canvas.get(0).getContext('2d');
+
+		var _img = new Image();
+		_img.src = '龙猫.jpg';
+
+		$(_img).load(function() {
+			context.drawImage(_img, 0, 0, 441, 492, 0, 0, 300, 300);
+
+			var imageData = context.getImageData(0, 0, canvas.width(), canvas.height());
+			var pixels = imageData.data;
+			var numPixels = pixels.length;
+
+			// 清除画布所有内容
+			context.clearRect(0, 0, canvas.width(), canvas.height());
+
+			for (var i = 0; i < numPixels; i++) {
+				var average = (pixels[i * 4] + pixels[i * 4 + 1] + pixels[i * 4 + 2]) / 3;
+				pixels[i * 4] = average;
+				pixels[i * 4 + 1] = average;
+				pixels[i * 4 + 2] = average;
+
+			}
+
+			context.putImageData(imageData, 0, 0)
+
+		});
+
+	});
+	</script>
+
+	<script type="text/javascript">
+	// 像素化
+	jQuery(document).ready(function($) {
+		var canvas = $('#canvas3');
+		var context = canvas.get(0).getContext('2d');
+
+		var _img = new Image();
+		_img.src = '龙猫.jpg';
+
+		$(_img).load(function() {
+			context.drawImage(_img, 0, 0, 441, 492, 0, 0, 300, 300);
+
+			var imageData = context.getImageData(0, 0, canvas.width(), canvas.height());
+			var pixels = imageData.data;
+
+			var numTileRows = 120;
+			var numTileCols = 120;
+
+			var tileWidth = imageData.width/numTileCols;
+			var tileheight = imageData.height/numTileRows;
+
+			for (var r = 0; r < numTileRows; r++) {
+				for (var c = 0; c < numTileCols; c++) {
+					var x = (c*tileWidth) + (tileWidth / 2);
+					var y = (r*tileheight) + (tileheight / 2);
+
+					var pos = (Math.floor(y) * (imageData.width*4)) + (Math.floor(x)*4);
+
+					var red = pixels[pos];
+					var green = pixels[pos + 1];
+					var blue = pixels[pos + 2];
+
+					context.fillStyle = "rgb("+ red +", "+ green +", "+ blue +")";
+					context.fillRect(x-(tileWidth/2), y-(tileheight/2), tileWidth, tileheight);
+				}
+			}
+
+			// context.putImageData(imageData, 0, 0)
+
+		});
+
+	});
+	</script>
+	
+	<script type="text/javascript">
+	// 像素化
+	jQuery(document).ready(function($) {
+		var canvas = $('#canvas4');
+		var context = canvas.get(0).getContext('2d');
+
+		var _img = new Image();
+		_img.src = '龙猫.jpg';
+
+		$(_img).load(function() {
+			context.drawImage(_img, 0, 0, 441, 492, 0, 0, 300, 300);
+
+			var imageData = context.getImageData(0, 0, canvas.width(), canvas.height());
+			var pixels = imageData.data;
+
+			var numTileRows = 60;
+			var numTileCols = 60;
+
+			var tileWidth = imageData.width/numTileCols;
+			var tileheight = imageData.height/numTileRows;
+
+			for (var r = 0; r < numTileRows; r++) {
+				for (var c = 0; c < numTileCols; c++) {
+					var x = (c*tileWidth) + (tileWidth / 2);
+					var y = (r*tileheight) + (tileheight / 2);
+
+					var pos = (Math.floor(y) * (imageData.width*4)) + (Math.floor(x)*4);
+
+					var red = pixels[pos];
+					var green = pixels[pos + 1];
+					var blue = pixels[pos + 2];
+
+					context.fillStyle = "rgb("+ red +", "+ green +", "+ blue +")";
+					context.beginPath();
+					context.arc(x, y, tileWidth/2, 0, Math.PI*2, false);
+					context.closePath();
+					context.fill();
+				}
+			}
+
+			// context.putImageData(imageData, 0, 0)
+
+		});
+
+	});
+	</script>
+
+	<script type="text/javascript">
+	// 像素化
+	jQuery(document).ready(function($) {
+		var canvas = $('#canvas5');
+		var context = canvas.get(0).getContext('2d');
+
+		var _img = new Image();
+		_img.src = '龙猫.jpg';
+
+		$(_img).load(function() {
+			context.drawImage(_img, 0, 0, 441, 492, 0, 0, 300, 300);
+
+			var imageData = context.getImageData(0, 0, canvas.width(), canvas.height());
+			var pixels = imageData.data;
+			var numPixels = imageData.width * imageData.height;
+
+		// 循环所有像素
+		var numTimes = 5;
+		for (var t = 0; t < numTimes; t++) {
+			for(var i = 0; i < numPixels; i++) {
+				var n = 1;
+				pixels[i*4] = (pixels[(i-n)*4] + pixels[i*4] + pixels[(i+n)*4]) /3; // red
+				pixels[i*4 + 1] = (pixels[(i-n)*4 + 1] + pixels[i*4 + 1] + pixels[(i+n)*4 + 1]) / 3; // gree
+				pixels[i*4 + 2] = (pixels[(i-n)*4 + 2] + pixels[i*4 + 2] + pixels[(i+n)*4 + 2]) / 3; // blue
+				pixels[i*4 + 3] = 255; // alpha
+
+			}
+		}
+
+			context.putImageData(imageData, 0, 0)
+
+		});
+
+	});
+	</script>
+
+
+	<script type="text/javascript">
+	// 像素化
+	jQuery(document).ready(function($) {
+		var canvas = $('#canvas6');
+		var context = canvas.get(0).getContext('2d');
+
+		var _img = new Image();
+		_img.src = '龙猫.jpg';
+
+		$(_img).load(function() {
+			context.drawImage(_img, 0, 0, 441, 492, 0, 0, 300, 300);
+
+			var imageData = context.getImageData(0, 0, canvas.width(), canvas.height());
+			var pixels = imageData.data;
+
+			var numTileRows = 60;
+			var numTileCols = 60;
+
+			var tileWidth = imageData.width/numTileCols;
+			var tileheight = imageData.height/numTileRows;
+
+			for (var r = 0; r < numTileRows; r++) {
+				for (var c = 0; c < numTileCols; c++) {
+					var x = (c*tileWidth) + (tileWidth / 2);
+					var y = (r*tileheight) + (tileheight / 2);
+
+					var pos = (Math.floor(y) * (imageData.width*4)) + (Math.floor(x)*4);
+
+					var red = pixels[pos];
+					var green = pixels[pos + 1];
+					var blue = pixels[pos + 2];
+
+					context.fillStyle = "rgb("+ red +", "+ green +", "+ blue +")";
+					context.beginPath();
+					context.arc(x, y, tileWidth/2, 0, Math.PI*2, false);
+					context.closePath();
+					context.fill();
+				}
+			}
+
+			// context.putImageData(imageData, 0, 0)
+
+		});
+
+	});
+	</script>
+</head>
+<body>
+<div>
+	<h3>反转颜色</h3>
+	<canvas id="canvas" width="300" height="300">
+		
+	</canvas>
+</div>
+
+<div>
+	<h3>灰度</h3>
+	<canvas id="canvas2" width="300" height="300">
+		
+	</canvas>
+</div>
+
+<div>
+	<h3>像素化</h3>
+	<canvas id="canvas3" width="300" height="300">
+		
+	</canvas>
+</div>
+
+<div>
+	<h3>像素化</h3>
+	<canvas id="canvas4" width="300" height="300">
+		
+	</canvas>
+</div>
+<div>
+	<h3>动感模糊</h3>
+	<canvas id="canvas5" width="300" height="300">
+		
+	</canvas>
+</div>
+<div>
+	<h3>动感模糊</h3>
+	<canvas id="canvas6" width="300" height="300">
+		
+	</canvas>
+</div>
+</body>
+</html>

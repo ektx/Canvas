@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>循环 - 动画 - Canvas</title>
+</head>
+<body>
+	<canvas id="canvas" height="400" width="400"></canvas>
+	<div>
+		<button id="startAnimation">Start</button>
+		<button id="stopAnimation">Stop</button>
+	</div>
+</body>
+<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+
+<script>
+var canvas = $('#canvas');
+var context = canvas.get(0).getContext('2d');
+
+var canvasWidth = canvas.width();
+var canvasHeight = canvas.height();
+
+function animate() {
+	context.clearRect(0,0, canvasWidth, canvasHeight);
+	var shapesLength = shapes.length;
+	for (var i = 0; i < shapesLength; i++) {
+		var tmpShape = shapes[i];
+		var s = tmpShape.s;
+
+		if (!tmpShape.reverseX) {
+			tmpShape.x += s;
+		} else {
+			tmpShape.x -= s;
+		}
+
+		if (!tmpShape.reverseY) {
+			tmpShape.y += s;
+		} else {
+			tmpShape.y -= s;
+		}
+
+		context.beginPath();
+		context.fillStyle = "rgb(" +tmpShape.r+ ","+tmpShape.g+","+tmpShape.b+")";
+		// console.log(tmpShape.r);
+		
+		//	context.arc(圆心X, 圆心Y, 半径, 开始角度, 结束角度, 顺时针(false));
+		context.arc(tmpShape.x, tmpShape.y, tmpShape.R, 0, Math.PI*2, false);
+		context.closePath();
+		context.fill();
+
+		if(tmpShape.x < tmpShape.R) {
+			tmpShape.reverseX = false;
+		} else if (tmpShape.x + tmpShape.R > canvasWidth) {
+			tmpShape.reverseX = true;
+		}
+		if(tmpShape.y < tmpShape.R) {
+			tmpShape.reverseY = false;
+		} else if (tmpShape.y + tmpShape.R > canvasHeight) {
+			tmpShape.reverseY = true;
+		}
+	}
+	if (playAnimation) {
+		// 1000 / 30 = 33 一秒钟，出现30帧动画，每个约用时33毫秒
+		setTimeout(animate, 33);
+	}
+}
+
+var playAnimation = true;
+
+var startButton = $('#startAnimation');
+var stopButton = $('#stopAnimation');
+
+stopButton.hide();
+startButton.click(function() {
+	$(this).hide();
+	stopButton.show();
+
+	playAnimation = true;
+	animate();
+});
+
+stopButton.click(function() {
+	$(this).hide();
+	startButton.show();
+
+	playAnimation = false;
+});
+
+var Shape = function(x, y, r, g, b, R, s) {
+	this.x = x;
+	this.y = y;
+	this.r = r;		// red
+	this.g = g;		// yellow
+	this.b = b;		// blue
+	this.s = s;
+	this.reverseX = false;
+	this.reverseY = false;
+
+	this.radius = Math.random()*60;
+	this.angle = 0;
+	this.R = Math.random()*10;
+}
+
+var shapes = new Array();
+
+// shapes.push(new Shape(50, 50));
+// shapes.push(new Shape(100,100));
+// shapes.push(new Shape(150,150));
+for (var i = 0; i<20; i++) {
+	var x = Math.random()*250;
+	var y = Math.random()*250;
+	var r = parseInt(Math.random()*255);
+	var g = parseInt(Math.random()*255);
+	var b = parseInt(Math.random()*255);
+	var R = Math.random()*10;
+	var s = Math.random()*10;
+
+	shapes.push(new Shape(x, y, r, g, b, R, s));
+}
+</script>
+</html>

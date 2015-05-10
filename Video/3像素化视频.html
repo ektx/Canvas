@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>控制播放</title>
+	<script type="text/javascript" src="/~zwl/lib/jquery/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		var canvas = $('#canvas');
+		var context = canvas.get(0).getContext('2d');
+
+
+		var video = $('#myVideo');
+
+		video.bind('play', function() {
+			drawCanvas();
+		});
+
+		function drawCanvas() {
+			if(video.get(0).paused || video.get(0).ended)
+				return false;
+
+			context.drawImage(video.get(0), 0, 0, 848, 480);
+
+			var imageData = context.getImageData(0, 0, canvas.width(), canvas.height());
+			var pixels = imageData.data;
+
+			context.clearRect(0, 0, canvas.width(), canvas.height());
+
+			var numTileRows = 60;
+			var numTileCols = 60;
+
+			var tileWidth = imageData.width / numTileCols;
+			var tileHeight = imageData.height / numTileRows;
+
+			for (var r = 0; r < numTileRows; r++) {
+				for (var c = 0; c < numTileCols; c++) {
+					var x = (c*tileWidth) + (tileWidth/2);
+					var y = (r*tileHeight) + (tileHeight/2);
+
+					var pos = (Math.floor(y)*(imageData.width*4)) + (Math.floor(x)*4);
+
+					var red = pixels[pos];
+					var green = pixels[pos+1];
+					var blue = pixels[pos+2];
+
+					context.fillStyle = "rgb("+red+", "+green+", "+blue+")";
+					context.fillRect(x-(tileWidth/2), y-(tileHeight/2), tileWidth, tileHeight);
+				}
+			}
+
+			setTimeout(drawCanvas, 100);
+		}
+
+		$('#play').click(function() {
+			video.get(0).play();
+		});
+
+		$('#pause').click(function() {
+			video.get(0).pause();
+		});
+	})
+	</script>
+
+</head>
+<body>
+	<!-- controls 显示控制条 -->
+<canvas id="canvas" width="848" height="480">
+	<video id="myVideo" width="848" height="480">
+		<source src="iPadAir.mp4" type="video/mp4">
+	</video>
+</canvas>
+	<div>
+		<button id="play">Play</button>
+		<button id="pause">pause</button>
+	</div>
+
+</body>
+</html>

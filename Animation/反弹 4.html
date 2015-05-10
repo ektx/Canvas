@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>循环 - 动画 - Canvas</title>
+	<style>
+	html,body {
+		width: 100%;
+		height: 100%;
+		margin: 0;
+		padding: 0;
+	}
+	div {
+		position: absolute;
+		top: 10px;
+		left: 10px;
+	}
+	</style>
+</head>
+<body>
+	<div>
+		<button id="startAnimation">Start</button>
+		<button id="stopAnimation">Stop</button>
+	</div>
+	<canvas id="canvas"></canvas>
+	<p></p>
+</body>
+<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+
+<script>
+var canvas = $('#canvas');
+var context = canvas.get(0).getContext('2d');
+
+function resizeCanvas() {
+	canvas.attr('width', $(window).get(0).innerWidth);
+	canvas.attr('height', $(window).get(0).innerHeight);
+}
+
+$(window).resize(function() {
+	resizeCanvas();
+});
+resizeCanvas();
+
+
+function animate() {
+	var canvasWidth = canvas.width();
+	var canvasHeight = canvas.height();
+
+	context.clearRect(0,0, canvasWidth, canvasHeight);
+	var shapesLength = shapes.length;
+	for (var i = 0; i < shapesLength; i++) {
+		var tmpShape = shapes[i];
+		var xs = tmpShape.xs;
+		var ys = tmpShape.ys;
+
+		if (!tmpShape.reverseX) {
+			tmpShape.x += xs;
+		} else {
+			tmpShape.x -= xs;
+		}
+
+		if (!tmpShape.reverseY) {
+			tmpShape.y += ys;
+		} else {
+			tmpShape.y -= ys;
+		}
+
+		context.beginPath();
+		context.fillStyle = "rgba(" +tmpShape.r+ ","+tmpShape.g+","+tmpShape.b+","+tmpShape.a+")";
+		// console.log(tmpShape.r);
+		
+		//	context.arc(圆心X, 圆心Y, 半径, 开始角度, 结束角度, 顺时针(false));
+		context.arc(tmpShape.x, tmpShape.y, tmpShape.R, 0, Math.PI*2, false);
+		context.closePath();
+		context.fill();
+
+		if(tmpShape.x < tmpShape.R) {
+			tmpShape.reverseX = false;
+		} else if (tmpShape.x + tmpShape.R > canvasWidth) {
+			tmpShape.reverseX = true;
+		}
+		if(tmpShape.y < tmpShape.R) {
+			tmpShape.reverseY = false;
+		} else if (tmpShape.y + tmpShape.R > canvasHeight) {
+			tmpShape.reverseY = true;
+		}
+	}
+	if (playAnimation) {
+		// 1000 / 30 = 33 一秒钟，出现30帧动画，每个约用时33毫秒
+		setTimeout(animate, 33);
+	}
+}
+
+var playAnimation = true;
+
+var startButton = $('#startAnimation');
+var stopButton = $('#stopAnimation');
+
+stopButton.hide();
+startButton.click(function() {
+	$(this).hide();
+	stopButton.show();
+
+	playAnimation = true;
+	animate();
+});
+
+stopButton.click(function() {
+	$(this).hide();
+	startButton.show();
+
+	playAnimation = false;
+});
+
+var Shape = function(x, y, r, g, b, a, R, xs, ys) {
+	this.x = x;
+	this.y = y;
+	this.r = r;		// red
+	this.g = g;		// yellow
+	this.b = b;		// blue
+	this.a = a;
+	this.xs = xs;
+	this.ys = ys;
+	this.reverseX = false;
+	this.reverseY = false;
+
+	this.angle = 0;
+	this.R = R;
+}
+
+var shapes = new Array();
+
+// shapes.push(new Shape(50, 50));
+// shapes.push(new Shape(100,100));
+// shapes.push(new Shape(150,150));
+for (var i = 0; i<50; i++) {
+	var x = Math.random()*1000;
+	var y = Math.random()*600;
+	var r = parseInt(Math.random()*255);
+	var g = parseInt(Math.random()*255);
+	var b = parseInt(Math.random()*255);
+	var a = parseInt(Math.random()*255);
+	var R = 5 + Math.random()*60;
+	var xs = Math.random()*3;
+	var ys = Math.random()*2;
+
+	shapes.push(new Shape(x, y, r, g, b, a, R, xs, ys));
+}
+</script>
+</html>

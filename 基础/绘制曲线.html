@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>描边样式</title>
+</head>
+
+<body>
+<canvas id="tree" width="400" height="400"></canvas>
+</body>
+<script>
+// 绘制树冠轮廓函数
+function createCanopyPath(context) {
+	// 绘制树冠
+	context.beginPath();
+	
+	context.moveTo(-25, -50);
+	context.lineTo(-10, -80);
+	context.lineTo(-20, -80);
+	context.lineTo(-5, -110);
+	context.lineTo(-15, -110);
+	
+	// 树的顶点
+	context.lineTo(0, -140);
+	
+	context.lineTo(15, -110);
+	context.lineTo(5, -110);
+	context.lineTo(20, -80);
+	context.lineTo(10, -80);
+	context.lineTo(25, -50);
+	
+	// 连接起点，闭合路径
+	context.closePath();
+}
+
+// 在canvas 上画树的函数
+function drawTrails() {
+	var canvas = document.getElementById('tree');
+	var context = canvas.getContext('2d');
+	
+	context.save();
+	context.translate(50, 250);
+	
+	// 第一条
+	// 曲线右上弯曲
+	context.moveTo(0,0);
+	context.quadraticCurveTo(170, -50, 260, -190);
+	
+	//
+	context.lineWidth = 20;
+	// 绘制当前路径
+	context.stroke();
+
+	//创建树冠的路径
+	createCanopyPath(context);
+	
+	// 加宽线条
+	context.lineWidth = 4;
+	
+	// 平滑路径接口
+	context.lineJoin = 'round';
+	
+	//划线的颜色
+	context.strokeStyle = '#663300';
+	
+	// 设置填充色
+	context.fillStyle = '#663300';
+	// 填充的位置与宽高
+	context.fillRect(-5, -50, 10, 50);
+
+	
+	// 绘制当前路径
+	context.stroke();
+	
+	// 恢复图像
+	context.restore();	
+
+	// 填充树色
+	context.fillStyle = '#339900';
+	context.fill();
+
+}
+
+window.addEventListener('load', drawTrails, true);
+
+</script>
+</html>

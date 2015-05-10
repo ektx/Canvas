@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>canvas 裁剪图像</title>
+	<script type="text/javascript" src="../js/jquery-2.0.3.min.js"></script>
+	<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		var canvas = $('#canvas');
+		var context = canvas.get(0).getContext('2d');
+
+		var _img = new Image();
+		_img.src = '龙猫.jpg';
+
+		$(_img).load(function() {
+			context.drawImage(_img, 100, 100, 150, 150, 10, 10, 200, 200);
+		})
+	});
+	</script>
+</head>
+<body>
+<div>
+	<h3>drawImage 裁剪图像</h3>
+	<p>context.drawImage(图片地址, sx, sy, sw, sh, dx, dy, dw, dh);</p>
+	<p>sx表示裁剪原图的x；sw表示裁剪原图上的宽；dx表示在canvas上的x;dw表示绘制的宽度</p>
+	<canvas id="canvas" width="300" height="300">
+		
+	</canvas>
+</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>循环 - 动画 - Canvas</title>
+</head>
+<body>
+	<canvas id="canvas" height="400" width="400"></canvas>
+	<div>
+		<button id="startAnimation">Start</button>
+		<button id="stopAnimation">Stop</button>
+	</div>
+</body>
+<script type="text/javascript" src="../js/jquery-2.0.3.min.js"></script>
+
+<script>
+var canvas = $('#canvas');
+var context = canvas.get(0).getContext('2d');
+
+var canvasWidth = canvas.width();
+var canvasHeight = canvas.height();
+
+function animate() {
+	context.clearRect(0,0, canvasWidth, canvasHeight);
+	var shapesLength = shapes.length;
+	for (var i = 0; i < shapesLength; i++) {
+		var tmpShape = shapes[i];
+		tmpShape.x++;
+		if (tmpShape.x > canvasWidth) {
+			tmpShape.x = 0;
+		}
+		context.fillRect(tmpShape.x, tmpShape.y, tmpShape.width, tmpShape.height);
+	}
+	if (playAnimation) {
+		// 1000 / 30 = 33 一秒钟，出现30帧动画，每个约用时33毫秒
+		setTimeout(animate, 33);
+	}
+}
+
+var playAnimation = true;
+
+var startButton = $('#startAnimation');
+var stopButton = $('#stopAnimation');
+
+stopButton.hide();
+startButton.click(function() {
+	$(this).hide();
+	stopButton.show();
+
+	playAnimation = true;
+	animate();
+});
+
+stopButton.click(function() {
+	$(this).hide();
+	startButton.show();
+
+	playAnimation = false;
+});
+
+var Shape = function(x, y, width, height) {
+	this.x = x;
+	this.y = y;
+	this.width = width;
+	this.height = height;
+}
+
+var shapes = new Array();
+
+// shapes.push(new Shape(50, 50));
+// shapes.push(new Shape(100,100));
+// shapes.push(new Shape(150,150));
+for (var i = 0; i<10; i++) {
+	var x = Math.random()*250;
+	var y = Math.random()*250;
+	var width = height = Math.random()*50;
+	shapes.push(new Shape(x, y, width, height));
+}
+</script>
+</html>

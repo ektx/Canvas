@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>圆</title>
+</head>
+
+<body>
+<canvas id="yuan" height="400" width="400"></canvas>
+</body>
+<script type="text/javascript">
+	var canvas = document.getElementById('yuan');
+	var context = canvas.getContext('2d');
+	
+	context.beginPath();
+	context.fillStyle = "rgb(0,255,0)";
+	//	context.arc(圆心X, 圆心Y, 半径, 开始角度, 结束角度, 顺时针(false));
+	context.arc(200, 200, 120, 0, Math.PI*2, false);
+	context.fill();
+	
+	var text = "ZWL";
+	context.fillStyle = "#333";
+	context.font = "30px 黑体";
+	context.fillText(text, 40,40);
+	context.strokeText(text, 40, 100);
+	
+	//角度计算公式
+	var degrees =1;
+	var radians = degrees * (Math.PI/180);
+	
+	// clear canvas
+	var canvasWidth = document.getElementById('yuan').width;
+	var canvasHeight = document.getElementById('yuan').height;
+	// context.clearRect(200,200,canvasWidth,canvasHeight);
+</script>
+</html>

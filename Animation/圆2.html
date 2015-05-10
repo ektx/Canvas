@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>圆</title>
+</head>
+
+<body>
+<canvas id="yuan" height="400" width="400"></canvas>
+</body>
+<script type="text/javascript">
+	var canvas = document.getElementById('yuan'),
+		width = canvas.width,
+		height = canvas.height;
+	var context = canvas.getContext('2d');
+	
+	var playAnimaton = 'true';
+
+	function animate() {
+		context.clearRect(0,0, width, height);
+
+		d = new Date();
+		var sec = d.getSeconds();
+		var milli  = d.getMilliseconds();
+		var cirumferenceMil = (2 * Math.PI) * (milli / 1000);
+		var cirumferenceSec = (2 *  Math.PI) * (sec / 60);
+
+		cirumferenceMil = cirumferenceMil + 1.5 *Math.PI;
+		cirumferenceSec = cirumferenceSec + 1.5 * Math.PI;
+
+		context.beginPath();
+		context.arc( width/2, height/2, 150, 1.5 * Math.PI, cirumferenceMil, false);
+		context.strokeStyle = '#f90';
+		context.lineWidth = 10;
+		context.stroke();
+
+		context.beginPath();
+		context.arc( width/2, height/2, 120, 1.5 * Math.PI, cirumferenceSec, false);
+		context.strokeStyle = '#690';
+		context.lineWidth = 20;
+		context.stroke();
+
+		if (playAnimaton) {
+			setTimeout(animate, 33);
+		}
+	}
+	animate();
+</script>
+</html>

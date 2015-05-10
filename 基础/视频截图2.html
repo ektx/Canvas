@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>视频截图</title>
+</head>
+
+<body>
+<video id="movies" autoplay onCanPlay="starVideo()" onEnded="stopTimeline()" autobuffer="true" width="400px" height="300px" controls>
+	<source src="file:///Users/ZWL/Movies/iphone5.mp4" type="video/mp4">
+</video>
+
+<canvas id="timeline" width="400px" height="300px">
+</canvas>
+
+
+</body>
+<script type="text/javascript">
+	//拾取帧的时间间隔：单位是 ms
+	var updateInterval = 100000;
+	
+	//时序中帧的大小
+	var frameWidth = 100;
+	var frameHeight = 75;
+	
+	//时序的总帧数
+	var frameRows = 4;
+	var frameColumns = 4;
+	var frameGrid = frameRows * frameColumns;
+	
+	//当前帧
+	var frameCount = 0;
+	
+	//播放完后取消计时器
+	var intervalId;
+	
+	var videoStared = false;
+
+	function updateFrame() {
+		var video = document.getElementById('movies');
+		var timeline = document.getElementById('timeline');
+		
+		var ctx = timeline.getContext('2d');
+		
+		//根据帧数计算出当前播放位置
+		//然后以视频为输入参数绘制图像
+		var framePosition = frameCount % frameGrid;
+		var frameX = (framePosition % frameColumns) * frameWidth;
+		var frameY = (Math.floor(framePosition / frameRows)) * frameHeight;
+		ctx.drawImage(video,0,0,400,300,frameX,frameY,frameWidth,frameHeight);
+		
+		frameCount++;
+		
+	}
+
+	function starVideo(){
+		
+		//只在视频第一次播放时设置计时器
+		if (videoStared)
+			return;
+			
+			//计算初始帧，然后以规定时间间隔创建其他帧
+			updateFrame();
+			intervalId = setInterval(updateFrame, updateInterval);
+		
+	}
+	
+	var timeline = document.getElementById('timeline');
+	timeline.onclick = function(evt) {
+		var offX = evt.layerX - timeline.offsetLeft;
+		var offY = evt.layerY - timeline.offsetTop;
+		
+		//计算以0为基准索引的网格中哪帧被单击
+		var clickedFrame = Math.floor( offY / frameHeight) * frameRows;
+		clickedFrame += Math.floor( offX 	/ frameWidth);
+		
+		//视频开始后已经播放到多少帧
+		var seekedFrame = (((Math.floor(frameCount / frameGrid))* frameGrid) + clickedFrame);
+		
+		//如果用户单击的帧在当前帧之前，则假定是一轮的帧
+		if (clickedFrame > (frameCount % 16))
+		seekedFrame -= frameGrid;
+		
+		if (seekedFrame < 0)
+		return;
+	}
+	
+	//停止绘制时序的帧
+	function stopTimeline() {
+		clearInterval(intervalId);	
+	}
+</script>
+</html>

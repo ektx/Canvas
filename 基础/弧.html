@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>弧</title>
+</head>
+<body>
+	<canvas id="canvas" width="300" height="300"></canvas>
+</body>
+<script type="text/javascript">
+	var canvas = document.getElementById('canvas');
+	var ctx = canvas.getContext("2d");
+
+	ctx.fillStyle = "#ff0";
+	ctx.beginPath();
+	ctx.moveTo(5, 0);
+	ctx.arcTo(50, 0, 50, 50, 50);
+	// ctx.arcTo(0, 50, 50, 0, 50);
+	// ctx.closePath();
+	ctx.stroke();
+</script>
+</html>

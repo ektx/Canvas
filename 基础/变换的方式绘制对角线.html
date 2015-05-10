@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>绘制对角线</title>
+</head>
+
+<body>
+<p id="support"></p>
+<canvas id="diagonal" style="border:1px solid #00F;" height="400" width="400"></canvas>
+</body>
+<script type="text/javascript">
+//检测浏览器对canvas的支持情况
+try {
+	document.createElement("canvas").getContext("2d");
+	document.getElementById("support").innerHTML = 
+		"HTML5 Canvas is supported in your browser.";	
+} catch (e) {
+	document.getElementById("support").innerHTML =
+		"HTML5 Canvas is not supported in your brower.";
+}
+
+function drawDiagonal() {
+	// 取得 Canvas 元素及其绘图上下文
+	var canvas = document.getElementById('diagonal');
+	var context = canvas.getContext('2d');
+	
+	//保存当前绘图状态
+	context.save();
+	
+	//向右下方移动绘图上下文
+	context.translate(70, 140);
+	
+	// 以原点为起点，绘制与前面相同的线段
+	context.beginPath();
+	context.moveTo(0, 0);
+	context.lineTo(70, -70);
+	context.stroke();
+	
+	//用绝对坐标来创建一条路径
+	context.beginPath();
+	context.moveTo(0, 0);
+	context.lineTo(70, 70);
+	
+	//绘制到 canvas
+	context.stroke();
+		
+
+	// 恢复原有的绘制状态
+	context.restore();
+	
+}
+
+window.addEventListener('load', drawDiagonal, true);
+</script>
+
+</html>

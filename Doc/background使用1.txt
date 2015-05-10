@@ -1,0 +1,114 @@
+background属性包括：
+background-color  规定要使用的背景颜色。 1
+background-position 规定背景图像的位置。  1
+background-size 规定背景图片的尺寸。  3
+background-repeat 规定如何重复背景图像。 1
+background-origin 规定背景图片的定位区域。  3
+background-clip 规定背景的绘制区域。  3
+background-attachment 规定背景图像是否固定或者随着页面的其余部分滚动。  1
+background-image  规定要使用的背景图像。 1
+inherit 规定应该从父元素继承 background 属性的设置。  1
+
+
+backgound 使用高级篇
+Canvas使用与元素的使用
+
+webkit解决方案
+
+1.webkit-canvas
+用于将样式来引用指定的canvas元素做背景。
+
+html元素css格式代码：
+background: -webkit-canvas(mycanvas);
+
+js里代码格式：
+var context = document.getCSSCanvasContext("2d", "mycanvas", width, height);
+
+实例：
+
+<html>
+ <head>
+ <style>
+ div { background: -webkit-canvas(squares); width:600px; height:600px; border:2px solid black }
+ </style>
+ 
+<script type="application/x-javascript">
+function draw(w, h) {
+ var ctx = document.getCSSCanvasContext("2d", "squares", w, h);
+
+ ctx.fillStyle = "rgb(200,0,0)";
+ ctx.fillRect (10, 10, 55, 50);
+
+ ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
+ ctx.fillRect (30, 30, 55, 50);
+}
+  </script>
+ </head>
+ <body onload="draw(300, 300)">
+   <div></div>
+ </body>
+</html>
+
+
+
+moz解决方案
+1.使用canvas做背景
+css格式：  background: -moz-element(canvasName);
+
+fn格式： document.mozSetImageElement('cnavasName', canvasID);
+
+要说明的是：在样式中，我们指定要使用的cnavas名称,在js中我们要把canvas名称和相应的canvas绑定起来。
+
+案例：
+<style type="text/css">
+  #mybox {
+    background-image: -moz-element(#canvasbg);
+    text-align: center;
+    width: 400px;
+    height: 400px;
+    cursor: pointer;
+  }
+</style>
+var c = 0x00;
+function clicked() {
+  var canvas = document.createElement("canvas");
+  canvas.setAttribute("width", 100);
+  canvas.setAttribute("height", 100);
+  
+  var ctx = canvas.getContext('2d');
+  ctx.fillStyle = "#" + c.toString(16) + "0000";
+  ctx.fillRect(25, 25, 75, 75);
+  
+  c += 0x11;
+  if (c > 0xff) {
+    c = 0x00;
+  }
+  
+  document.mozSetImageElement("canvasbg", canvas);
+}
+
+
+
+2.火狐的解决方案2相对来说则更加的简单与完美。它可以指定任何的元素来做为背景，同时还保持它的时时性。
+
+css格式：  background: -moz-element(#id);
+
+案例：
+<div style="width:400px; height:400px; background:-moz-element(#myBackground1) no-repeat;">
+  <p>This box uses the element with the #myBackground1 ID as its background!</p>
+</div>
+
+<div style="overflow:hidden; height:0;">
+  <div id="myBackground1" style="width:1024px; height:1024px; background-image: linear-gradient(to right, red, orange, yellow, white);">
+  <p style="transform-origin:0 0; transform: rotate(45deg); color:white;">This text is part of the background. Cool, huh?</p>
+  </div>
+</div>
+
+
+参考：
+http://www.w3school.com.cn/cssref/pr_background.asp
+
+https://www.webkit.org/blog/176/css-canvas-drawing/
+https://www.imququ.com/post/use-canvas-as-background-image.html
+https://developer.mozilla.org/en-US/docs/Web/API/document.mozSetImageElement
+https://developer.mozilla.org/en-US/docs/Web/CSS/element#Syntax

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>循环 - 动画 - Canvas</title>
+</head>
+<body>
+	<canvas id="canvas" height="400" width="400"></canvas>
+	<div>
+		<button id="startAnimation">Start</button>
+		<button id="stopAnimation">Stop</button>
+	</div>
+</body>
+<script type="text/javascript" src="../js/jquery-2.0.3.min.js"></script>
+
+<script>
+var canvas = $('#canvas');
+var context = canvas.get(0).getContext('2d');
+
+var canvasWidth = canvas.width();
+var canvasHeight = canvas.height();
+
+var x = 0;
+function animate() {
+	x++;
+	// 如果 x 的位置已经超出了可视区域，让它从0开始
+	if (x > canvasWidth) {
+		x = 0;
+	}
+	context.clearRect(0,0, canvasWidth, canvasHeight);
+	context.fillRect(x, 250, 10, 10);
+	if (playAnimation) {
+		// 1000 / 30 = 33 一秒钟，出现30帧动画，每个约用时33毫秒
+		setTimeout(animate, 33);
+	}
+}
+
+var playAnimation = true;
+
+var startButton = $('#startAnimation');
+var stopButton = $('#stopAnimation');
+
+stopButton.hide();
+startButton.click(function() {
+	$(this).hide();
+	stopButton.show();
+
+	playAnimation = true;
+	animate();
+});
+
+stopButton.click(function() {
+	$(this).hide();
+	startButton.show();
+
+	playAnimation = false;
+});
+</script>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>文字环绕 - 动画 - Canvas</title>
+</head>
+<body>
+	<canvas id="canvas" height="400" width="400"></canvas>
+	<div>
+		<button id="startAnimation">Start</button>
+		<button id="stopAnimation">Stop</button>
+	</div>
+</body>
+<script type="text/javascript" src="../js/jquery-2.0.3.min.js"></script>
+
+<script>
+var canvas = $('#canvas');
+var context = canvas.get(0).getContext('2d');
+
+var canvasWidth = canvas.width();
+var canvasHeight = canvas.height();
+
+function animate() {
+	context.clearRect(0,0, canvasWidth, canvasHeight);
+	var shapesLength = shapes.length;
+	for (var i = 0; i < shapesLength; i++) {
+		var tmpShape = shapes[i];
+	
+		var x = tmpShape.x + (tmpShape.radius*Math.cos(tmpShape.angle*(Math.PI/180)));
+		// var x = 200;
+		var y = tmpShape.y + (tmpShape.radius*Math.sin(tmpShape.angle*(Math.PI/180)));
+		// var y = 200;
+	
+		tmpShape.angle += 5;
+		if (tmpShape.angle > 360) {
+			tmpShape.angle = 0;
+		}
+
+		context.fillRect(x, y, tmpShape.width, tmpShape.height);
+		console.clear();
+		console.log('x:'+x+';y:'+y);
+	}
+	if (playAnimation) {
+		// 1000 / 30 = 33 一秒钟，出现30帧动画，每个约用时33毫秒
+		setTimeout(animate, 33);
+	}
+}
+
+var playAnimation = true;
+
+var startButton = $('#startAnimation');
+var stopButton = $('#stopAnimation');
+
+stopButton.hide();
+startButton.click(function() {
+	$(this).hide();
+	stopButton.show();
+
+	playAnimation = true;
+	animate();
+});
+
+stopButton.click(function() {
+	$(this).hide();
+	startButton.show();
+
+	playAnimation = false;
+});
+
+var Shape = function(x, y, width, height) {
+	this.x = x;
+	this.y = y;
+	this.width = width;
+	this.height = height;
+
+	this.radius = Math.random()*60;
+	this.angle = 0;
+}
+
+var shapes = new Array();
+
+// shapes.push(new Shape(50, 50));
+// shapes.push(new Shape(100,100));
+// shapes.push(new Shape(150,150));
+for (var i = 0; i<10; i++) {
+	var x = Math.random()*250;
+	var y = Math.random()*250;
+
+	var width = height = Math.random()*30;
+
+	shapes.push(new Shape(x, y, width, height));
+}
+</script>
+</html>

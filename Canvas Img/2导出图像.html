@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="auther" content="zwl" />
+	<meta name="date" content="2013-12-28 6" />
+	<title>canvas 导出图像</title>
+	<script type="text/javascript" src="/~zwl/lib/jQuery/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		var canvas = $('#canvas');
+		var context = canvas.get(0).getContext('2d');
+
+		context.beginPath();
+		context.moveTo(100, 50);
+		context.lineTo(150, 150);
+		context.lineTo(50, 150);
+		context.closePath();
+		context.stroke();
+		context.fill();
+
+		var dataURL = canvas.get(0).toDataURL();
+		var img = $("<img></img>");
+		img.attr("src", dataURL);
+
+		canvas.replaceWith(img);
+	})
+	</script>
+</head>
+<body>
+	<fieldest>
+		<legend>导出图像</legend>
+		<p>将 Canvas 导出为图片</p>
+		<canvas id="canvas" height="300" width="300px"></canvas>
+	</fieldest>
+</body>
+</html>

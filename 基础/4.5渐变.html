@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="auther" content="zwl" />
+	<meta name="date" content="2013-12-26 4" />
+	<title>canvas 渐变</title>
+</head>
+<body>
+	<fieldest>
+		<legend>线性渐变</legend>
+		<br>
+		<canvas id="canvas" height="300" width="300px"></canvas>
+	</fieldest>
+	<br>
+	<fieldest>
+		<legend>放射渐变</legend>
+		<br>
+		<canvas id="canvas2" height="300" width="300px"></canvas>
+	</fieldest>
+	<br>
+	<fieldest>
+		<legend>放射渐变(放射中心正中)</legend>
+		<br>
+		<canvas id="canvas3" height="300" width="300px"></canvas>
+	</fieldest>
+
+	<script>
+	var canvas = document.getElementById('canvas');
+	var context = canvas.getContext('2d');
+
+	// var gradient = context.createLinearGradient(x, y, end-x, end-y);
+	var gradient = context.createLinearGradient(0, 0, 0, canvas.height);
+	gradient.addColorStop(0, "rgb(0, 0, 0)");
+	gradient.addColorStop(1, "rgb(63, 169, 255)");
+
+	context.fillStyle = gradient;
+	context.fillRect(0, 0, canvas.width, canvas.height);
+
+	</script>
+
+	<script>
+	var canvas = document.getElementById('canvas2');
+	var context = canvas.getContext('2d');
+
+	// var gradient = context.createLinearGradient(x0, y0, r0, x1, y1, r1);
+	var gradient = context.createRadialGradient(295, 295, 5, 100, 100, 50);
+	gradient.addColorStop(0, "rgb(0, 0, 0)");
+	gradient.addColorStop(1, "rgb(63, 169, 255)");
+
+	context.fillStyle = gradient;
+	context.fillRect(0, 0, canvas.width, canvas.height);
+
+	</script>
+	
+	<script>
+	var canvas = document.getElementById('canvas3');
+	var context = canvas.getContext('2d');
+
+	var canvasCentrex = canvas.width/2;
+	var canvasCentrey = canvas.height/2;
+
+	// var gradient = context.createLinearGradient(x0, y0, r0, x1, y1, r1);
+	var gradient = context.createRadialGradient(canvasCentrex, canvasCentrey, 0, canvasCentrex, canvasCentrey, 250);
+	gradient.addColorStop(0, "rgb(0, 0, 0)");
+	gradient.addColorStop(1, "rgb(63, 163, 255)");
+
+	context.fillStyle = gradient;
+	context.fillRect(0, 0, canvas.width, canvas.height);
+
+	</script>
+</body>
+</html>

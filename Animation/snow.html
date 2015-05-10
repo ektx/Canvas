@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>snow</title>
+	<style type="text/css">
+	* {
+		margin:0;
+		padding: 0;
+	}
+	body,html {
+		background: #223344;
+		height: 100%;
+		overflow: hidden;
+	}
+	</style>
+</head>
+<body>
+	<canvas id="snow"></canvas>
+
+  <div style="padding:20px;">
+    <button onclick="launchFullscreen(document.documentElement);" class="sexyButton">Launch Fullscreen</button>
+    <button onclick="exitFullscreen();" class="sexyButton">Hide Fullscreen</button>
+    <button onclick="dumpFullscreen();" class="sexyButton">Dump Fullscreen Property Data</button>
+  </div>
+</body>
+<script>
+/*============ 缓冲 =============*/
+window.requsetAnimFrame = (function() {
+	return window.requsetAnimFrame		||
+		   window.webkitRequsetAnimationFrame ||
+		   window.mozRequestAnimationFrame ||
+		   window.oRequestAnimationFrame ||
+		   window.msRequestAnimationFrame ||
+		   function( callback) {
+		   	window.setTimeout(callback, 1000/60);
+		   };
+})();
+
+
+/*****************************************************/
+var canvas = document.getElementById('snow'),
+	context = canvas.getContext('2d'),
+	height = canvas.height = document.body.offsetHeight,
+	width = canvas.width = document.body.offsetWidth,
+	collection = [],
+	num_drops = 2000, // number of drops
+	gravity = 1, // 重力倍增
+	windforce =1, // 风力系数
+	windmultiplier = 0, // 风力倍数
+	maxspeed = 5,
+	gutter = 0;
+
+	function Drop() {
+		this.x;
+		this.y;
+		this.radius;
+		this.distance;
+		this.color;
+		this.speed;
+		this.vx;
+		this.vy;
+	}
+	Drop.prototype = {
+		constructor: Drop,
+		random_x: function() {
+			var n = width * (1 + gutter);
+			return (1 - (1 + gutter)) + (Math.random() * n);
+		},
+		draw: function(context) {
+			context.fillStyle = this.color;
+			context.beginPath();
+			context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false );
+			context.closePath();
+			context.fill();
+		}
+	};
+
+	function draw_frame() {
+		context.clearRect(0, 0, width, height);
+
+		collection.forEach(function(drop) {
+			context.globalAlpha = (drop.distance + 1) / 10;
+			drop.draw(context);
+			context.globalAlpha = 1;
+			drop.x += drop.vx;
+			drop.y += drop.vy;
+			var lx = drop.vx + windforce;
+			lx < maxspeed && lx > 1 - maxspeed && (drop.vx = lx);
+			if (drop.y > (drop.distance + 1) / 10 * height) {
+				drop.y = Math.random() * -drop.radius * (num_drops / 10);
+				drop.x =  drop.random_x();
+			}
+			if (drop.x > width * (1 + gutter)) {
+				drop.x = 1 - (width * gutter);
+			}
+			if (drop.x < 1 - (width * gutter)) {
+				drop.x = width * (1 + gutter);
+			}
+		})
+	}
+
+	function animate() {
+		requsetAnimFrame(animate);
+		draw_frame();
+	}
+
+	function windtimer() {
+		windforce = Math.random() > 0.5 ? windmultiplier : -windmultiplier;
+		setTimeout(windtimer, Math.random() * (1000 * 30));
+	}
+
+
+	function init() {
+		collection = [];
+		while (num_drops--) {
+			var drop = new Drop();
+			drop.color = "#eee";
+			drop.distance = Math.random() * 10 | 0;
+			drop.speed = Math.random() * (drop.distance / 10) + gravity;
+			drop.vx = 0;
+			drop.vy = Math.random() * drop.speed + (drop.speed / 2);
+			drop.radius = (drop.distance + 1) / 16 * 3;
+			drop.x = drop.random_x();
+			drop.y = Math.random() * height;
+			collection.push(drop);
+		}
+		windtimer();
+		animate();
+		window.onresize = function() {
+			height = canvas.height = document.body.offsetHeight;
+			console.log(height);
+			width = canvas.width = document.body.offsetWidth;
+		}
+	}
+	init();
+
+function launchFullscreen(element) {
+	if(element.requestFullscreen) {
+		element.requestFullscreen();
+	} else if (element.mozRequestFullScreen) {
+		element.mozRequestFullScreen();
+	} else if (element.webkitRequestFullscreen) {
+		element.webkitRequestFullscreen();
+	} else if (element.msRequestFullscreen) {
+		element.msRequestFullscreen();
+	}
+}
+function exitFullscreen() {
+	if(document.exitFullscreen) {
+		document.exitFullscreen();
+	} else if (document.mozCancelFullScreen) {
+		document.mozCancelFullScreen();
+	} else if (document.webkitExitFullscreen) {
+		document.webkitExitFullscreen();
+	}
+}
+
+</script>
+
+</html>

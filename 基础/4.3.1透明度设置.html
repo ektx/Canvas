@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>canvas globalAlpha</title>
+</head>
+<body>
+	<canvas id="canvas" height="400" width="400px"></canvas>
+	<script>
+	var canvas = document.getElementById('canvas');
+	var context = canvas.getContext('2d');
+
+	// 绘制蓝色方块
+	context.fillStyle = 'rgb(63,169,245)';
+	context.fillRect(50, 50, 100, 100);
+
+	// 设置透明度
+	context.globalAlpha = 0.5;
+
+	// 绘制红色方块
+	context.fillStyle = 'rgb(255,123,172)';
+	context.fillRect(100, 100, 200, 100);
+
+	// 设置透明度
+	context.globalAlpha = 0.25;
+
+	// 绘制红色方块
+	context.fillStyle = 'rgb(255,123,0)';
+	context.fillRect(50, 100, 100, 200);
+
+	</script>
+</body>
+</html>
