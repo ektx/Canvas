@@ -3,73 +3,64 @@
 <head>
 	<meta charset="utf-8">
 	<title>canvas 图像变形</title>
-	<script type="text/javascript" src="../js/jquery-2.0.3.min.js"></script>
 	<script type="text/javascript">
-	jQuery(document).ready(function($) {
-		var canvas = $('#canvas');
-		var context = canvas.get(0).getContext('2d');
+	window.addEventListener('DOMContentLoaded', function() {
+
+		// 平移
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
 
 		var _img = new Image();
 		_img.src = '龙猫.jpg';
 
 		context.translate(100,100);
 		
-		$(_img).load(function() {
+		_img.onload = function() {
 			context.drawImage(_img, 100, 100, 150, 150, 10, 10, 200, 200);
+		};
 
+		// 旋转
+		var canvas2 = document.getElementById('canvas2');
+		var context2 = canvas2.getContext('2d');
 
-		})
-	});
-	</script>
-	
-	<script type="text/javascript">
-	jQuery(document).ready(function($) {
-		var canvas = $('#canvas2');
-		var context = canvas.get(0).getContext('2d');
+		var _img2 = new Image();
+		_img2.src = '龙猫.jpg';
 
-		var _img = new Image();
-		_img.src = '龙猫.jpg';
-
-		context.translate(150,0);
-		context.rotate(0.7854); // 45度
+		context2.translate(150,0);
+		context2.rotate(0.7854); // 45度
 		
-		$(_img).load(function() {
-			context.drawImage(_img, 100, 100, 150, 150, 10, 10, 200, 200);
+		_img2.onload = function() {
+			context2.drawImage(_img2, 100, 100, 150, 150, 10, 10, 200, 200);
+		};
 
 
-		})
-	});
-	</script>
-	
-	<script type="text/javascript">
-	jQuery(document).ready(function($) {
-		var canvas = $('#canvas3');
-		var context = canvas.get(0).getContext('2d');
+		var canvas3 = document.getElementById('canvas3');
+		var context3 = canvas3.getContext('2d');
 
-		var _img = new Image();
-		_img.src = '龙猫.jpg';
+		var _img3 = new Image();
+		_img3.src = '龙猫.jpg';
 		
-		$(_img).load(function() {
+		_img3.onload = function() {
 			// 左上角
-			context.translate(50,50);
-			context.drawImage(_img, 0, 0, 300, 300, 0, 0, 200, 200);
+			context3.translate(50,50);
+			context3.drawImage(_img3, 0, 0, 300, 300, 0, 0, 200, 200);
 
 			// 左下角
-			context.setTransform(1, 0, 0, 1, 0, 0); //重置变换矩形
-			context.translate(50, 450);
-			context.scale(1,-1);
-			context.drawImage(_img, 0, 0, 300, 300, 0, 0, 200, 200);
+			context3.setTransform(1, 0, 0, 1, 0, 0); //重置变换矩形
+			context3.translate(50, 450);
+			context3.scale(1,-1);
+			context3.drawImage(_img3, 0, 0, 300, 300, 0, 0, 200, 200);
 
-			context.setTransform(1, 0, 0, 1, 0, 0); //重置变换矩形
-			context.translate(450, 450);
-			context.scale(-1,-1);
-			context.drawImage(_img, 0, 0, 300, 300, 0, 0, 200, 200);
+			context3.setTransform(1, 0, 0, 1, 0, 0); //重置变换矩形
+			context3.translate(450, 450);
+			context3.scale(-1,-1);
+			context3.drawImage(_img3, 0, 0, 300, 300, 0, 0, 200, 200);
 			
-			context.setTransform(1, 0, 0, 1, 0, 0); //重置变换矩形
-			context.translate(450, 50);
-			context.scale(-1,1);
-			context.drawImage(_img, 0, 0, 300, 300, 0, 0, 200, 200);
-		})
+			context3.setTransform(1, 0, 0, 1, 0, 0); //重置变换矩形
+			context3.translate(450, 50);
+			context3.scale(-1,1);
+			context3.drawImage(_img3, 0, 0, 300, 300, 0, 0, 200, 200);
+		}
 	});
 	</script>
 </head>

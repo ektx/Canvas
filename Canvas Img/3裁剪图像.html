@@ -3,18 +3,17 @@
 <head>
 	<meta charset="utf-8">
 	<title>canvas 裁剪图像</title>
-	<script type="text/javascript" src="../js/jquery-2.0.3.min.js"></script>
 	<script type="text/javascript">
-	jQuery(document).ready(function($) {
-		var canvas = $('#canvas');
-		var context = canvas.get(0).getContext('2d');
+	window.addEventListener('DOMContentLoaded', function() {
+		var canvas = document.getElementById('canvas');
+		var context = canvas.getContext('2d');
 
 		var _img = new Image();
 		_img.src = '龙猫.jpg';
 
-		$(_img).load(function() {
+		_img.onload = function() {
 			context.drawImage(_img, 100, 100, 150, 150, 10, 10, 200, 200);
-		})
+		};
 	});
 	</script>
 </head>
