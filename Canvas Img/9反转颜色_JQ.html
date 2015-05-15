@@ -3,25 +3,24 @@
 <head>
 	<meta charset="utf-8">
 	<title>canvas 反转颜色</title>
+	<script type="text/javascript" src="../js/jquery-2.0.3.min.js"></script>
 	<script type="text/javascript">
-	window.addEventListener('DOMContentLoaded', function() {
-
-		// 1.反转颜色
-		var canvas = document.getElementById('canvas');
-		var context = canvas.getContext('2d');
+	jQuery(document).ready(function($) {
+		var canvas = $('#canvas');
+		var context = canvas.get(0).getContext('2d');
 
 		var _img = new Image();
 		_img.src = '龙猫.jpg';
 
-		_img.onload = function() {
+		$(_img).load(function() {
 			context.drawImage(_img, 0, 0, 441, 492, 0, 0, 300, 300);
 
-			var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+			var imageData = context.getImageData(0, 0, canvas.width(), canvas.height());
 			var pixels = imageData.data;
 			var numPixels = pixels.length;
 
 			// 清除画布所有内容
-			context.clearRect(0, 0, canvas.width, canvas.height);
+			context.clearRect(0, 0, canvas.width(), canvas.height());
 
 			for (var i = 0; i < numPixels; i++) {
 				pixels[i * 4] = 255 - pixels[i * 4];
@@ -32,54 +31,57 @@
 
 			context.putImageData(imageData, 0, 0)
 
-		};
+		});
 
+	});
+	</script>
+	
+	<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		var canvas = $('#canvas2');
+		var context = canvas.get(0).getContext('2d');
 
-		// 2.灰度
-		var canvas2 = document.getElementById('canvas2');
-		var context2 = canvas2.getContext('2d');
+		var _img = new Image();
+		_img.src = '龙猫.jpg';
 
-		var _img2 = new Image();
-		_img2.src = '龙猫.jpg';
+		$(_img).load(function() {
+			context.drawImage(_img, 0, 0, 441, 492, 0, 0, 300, 300);
 
-		_img2.onload = function() {
-			context2.drawImage(_img2, 0, 0, 441, 492, 0, 0, 300, 300);
-
-			var imageData2 = context2.getImageData(0, 0, canvas.width, canvas.height);
-			var pixels2 = imageData2.data;
-			var numPixels2 = pixels2.length;
+			var imageData = context.getImageData(0, 0, canvas.width(), canvas.height());
+			var pixels = imageData.data;
+			var numPixels = pixels.length;
 
 			// 清除画布所有内容
-			context2.clearRect(0, 0, canvas.width, canvas.height);
+			context.clearRect(0, 0, canvas.width(), canvas.height());
 
-			for (var i = 0; i < numPixels2; i++) {
-				var average = (pixels2[i * 4] + pixels2[i * 4 + 1] + pixels2[i * 4 + 2]) / 3;
-				pixels2[i * 4] = average;
-				pixels2[i * 4 + 1] = average;
-				pixels2[i * 4 + 2] = average;
+			for (var i = 0; i < numPixels; i++) {
+				var average = (pixels[i * 4] + pixels[i * 4 + 1] + pixels[i * 4 + 2]) / 3;
+				pixels[i * 4] = average;
+				pixels[i * 4 + 1] = average;
+				pixels[i * 4 + 2] = average;
 
 			}
 
-			context2.putImageData(imageData2, 0, 0)
+			context.putImageData(imageData, 0, 0)
 
-		};
+		});
 
 	});
 	</script>
 
 	<script type="text/javascript">
 	// 像素化
-	window.addEventListener('DOMContentLoaded', function() {
-		var canvas = document.getElementById('canvas3');
-		var context = canvas.getContext('2d');
+	jQuery(document).ready(function($) {
+		var canvas = $('#canvas3');
+		var context = canvas.get(0).getContext('2d');
 
 		var _img = new Image();
 		_img.src = '龙猫.jpg';
 
-		_img.onload = function() {
+		$(_img).load(function() {
 			context.drawImage(_img, 0, 0, 441, 492, 0, 0, 300, 300);
 
-			var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+			var imageData = context.getImageData(0, 0, canvas.width(), canvas.height());
 			var pixels = imageData.data;
 
 			var numTileRows = 120;
@@ -106,24 +108,24 @@
 
 			// context.putImageData(imageData, 0, 0)
 
-		};
+		});
 
 	});
 	</script>
 	
 	<script type="text/javascript">
 	// 像素化
-	window.addEventListener('DOMContentLoaded', function() {
-		var canvas = document.getElementById('canvas4');
-		var context = canvas.getContext('2d');
+	jQuery(document).ready(function($) {
+		var canvas = $('#canvas4');
+		var context = canvas.get(0).getContext('2d');
 
 		var _img = new Image();
 		_img.src = '龙猫.jpg';
 
-		_img.onload = function() {
+		$(_img).load(function() {
 			context.drawImage(_img, 0, 0, 441, 492, 0, 0, 300, 300);
 
-			var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+			var imageData = context.getImageData(0, 0, canvas.width(), canvas.height());
 			var pixels = imageData.data;
 
 			var numTileRows = 60;
@@ -153,24 +155,24 @@
 
 			// context.putImageData(imageData, 0, 0)
 
-		};
+		});
 
 	});
 	</script>
 
 	<script type="text/javascript">
-	// 动感模糊1
-	window.addEventListener('DOMContentLoaded', function(){
-		var canvas = document.getElementById('canvas5');
-		var context = canvas.getContext('2d');
+	// 像素化
+	jQuery(document).ready(function($) {
+		var canvas = $('#canvas5');
+		var context = canvas.get(0).getContext('2d');
 
 		var _img = new Image();
 		_img.src = '龙猫.jpg';
 
-		_img.onload = function() {
+		$(_img).load(function() {
 			context.drawImage(_img, 0, 0, 441, 492, 0, 0, 300, 300);
 
-			var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+			var imageData = context.getImageData(0, 0, canvas.width(), canvas.height());
 			var pixels = imageData.data;
 			var numPixels = imageData.width * imageData.height;
 
@@ -189,25 +191,25 @@
 
 			context.putImageData(imageData, 0, 0)
 
-		};
+		});
 
 	});
 	</script>
 
 
 	<script type="text/javascript">
-	// 动感模糊2
-	window.addEventListener('DOMContentLoaded', function() {
-		var canvas = document.getElementById('canvas6');
-		var context = canvas.getContext('2d');
+	// 像素化
+	jQuery(document).ready(function($) {
+		var canvas = $('#canvas6');
+		var context = canvas.get(0).getContext('2d');
 
 		var _img = new Image();
 		_img.src = '龙猫.jpg';
 
-		_img.onload = function() {
+		$(_img).load(function() {
 			context.drawImage(_img, 0, 0, 441, 492, 0, 0, 300, 300);
 
-			var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+			var imageData = context.getImageData(0, 0, canvas.width(), canvas.height());
 			var pixels = imageData.data;
 
 			var numTileRows = 60;
@@ -237,7 +239,7 @@
 
 			// context.putImageData(imageData, 0, 0)
 
-		};
+		});
 
 	});
 	</script>

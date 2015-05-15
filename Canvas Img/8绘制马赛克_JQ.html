@@ -3,10 +3,11 @@
 <head>
 	<meta charset="utf-8">
 	<title>canvas 绘制简单图像</title>
+	<script type="text/javascript" src="../js/jquery-2.0.3.min.js"></script>
 	<script type="text/javascript">
-	window.addEventListener('DOMContentLoaded', function() {
-		var canvas = document.getElementById('canvas');
-		var context = canvas.getContext('2d');
+	jQuery(document).ready(function($) {
+		var canvas = $('#canvas');
+		var context = canvas.get(0).getContext('2d');
 
 		// 调制绘制大小
 		var imageData = context.createImageData(300,300);
@@ -44,28 +45,32 @@
 		// 绘制到画布
 		context.putImageData(imageData, 0, 0);
 
+	});
+	</script>
 
-		var canvas2 = document.getElementById('canvas2');
-		var context2 = canvas2.getContext('2d');
+	<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		var canvas = $('#canvas2');
+		var context = canvas.get(0).getContext('2d');
 
 		// 调制绘制大小
-		var imageData2 = context2.createImageData(300,300);
-		var pixels2 = imageData2.data;
+		var imageData = context.createImageData(300,300);
+		var pixels = imageData.data;
 		// 统计所有像素点
-		var numPixels2 = imageData2.width * imageData2.height;
+		var numPixels = imageData.width * imageData.height;
 
 		// 循环所有像素
 		// Math.random 可以产生0到1之间的随机小数
-		for(var i = 0; i < numPixels2; i++) {
-			pixels2[i*4] = Math.floor(Math.random() * 255); // red
-			pixels2[i*4 + 1] = Math.floor(Math.random() * 255); // gree
-			pixels2[i*4 + 2] = Math.floor(Math.random() * 255); // blue
-			pixels2[i*4 + 3] = 255; // alpha
+		for(var i = 0; i < numPixels; i++) {
+			pixels[i*4] = Math.floor(Math.random() * 255); // red
+			pixels[i*4 + 1] = Math.floor(Math.random() * 255); // gree
+			pixels[i*4 + 2] = Math.floor(Math.random() * 255); // blue
+			pixels[i*4 + 3] = 255; // alpha
 
 		}
 
 		// 绘制到画布
-		context2.putImageData(imageData2, 0, 0);
+		context.putImageData(imageData, 0, 0);
 
 	});
 	</script>
