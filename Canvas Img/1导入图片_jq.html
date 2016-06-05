@@ -15,7 +15,7 @@
 
 		// context.drawImage(图片地址, x开始位置, y开始位置);
 		_img.onload = function() {
-			context1.drawImage(_img, 0, 2);
+			context1.drawImage(_img, 0, -2);
 		};
 
 		// 例2:
@@ -28,7 +28,7 @@
 		// context.drawImage(图片地址, Canvas上的x开始位置, Canvas上的y开始位置, 绘制的宽，绘制的高);
 		// 会压缩图像满足设定
 		_img.onload = function() {
-			context2.drawImage(_img, 0, 2, 300, 300);
+			context2.drawImage(_img, 0, -3, 300, 300);
 		};
 	})
 	</script>
