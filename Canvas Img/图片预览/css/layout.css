@@ -1,0 +1,26 @@
+@charset 'utf8';
+
+/*
+	Canvas 图像处理
+	------------------------------------
+	ektx <530675800@qq.com>
+	2016-6-19
+*/
+body, canvas {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: #673ab7;
+}
+
+canvas {
+	display: block;
+	margin: 0 auto;
+	border: 1px solid #eee;
+}
+
+#waterMark {
+	display: none;
+}

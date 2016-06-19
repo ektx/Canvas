@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<title>图片综合处理</title>
+	<link rel="stylesheet" href="css/layout.css">
+</head>
+<body>
+	<canvas id="canvas">
+		您的浏览器不支持 Canvas
+	</canvas>
+
+	<canvas id="manifier" style="display:none"></canvas>
+
+	<script>
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext('2d');
+		var img = new Image();
+
+		var Mcanvas = document.getElementById('manifier');
+		var Mctx = Mcanvas.getContext('2d');
+
+		var isMouseDown = false;
+
+		window.addEventListener('DOMContentLoaded', function() {
+
+			canvas.width = 400;
+			canvas.height = 400;
+
+			Mcanvas.width = 200;
+			Mcanvas.height = 200;
+
+
+			img.src = 'img/demo.png';
+			img.onload = function() {
+				// ctx.drawImage(img, 0, 0, canvas.width, canvas.height )
+				// ctx.drawImage(img, 0, 0, img.width, img.height );
+				ctx.drawImage(img, 0, 0 );
+
+			}
+		});
+
+		function getCanvasPoint (x, y) {
+			var canvasBoxInfo = canvas.getBoundingClientRect();
+			return {x: x - canvasBoxInfo.left, y: y - canvasBoxInfo.top}
+		}
+
+		canvas.onmousedown = function(e) {
+			e.preventDefault();
+
+			isMouseDown = true;
+
+			var point = getCanvasPoint(e.clientX, e.clientY );
+			console.log(point)
+
+			drawMagnifier(true, point);
+		}
+
+		canvas.onmousemove = function(e) {
+			e.preventDefault();
+
+			if ( isMouseDown ) {
+				var point = getCanvasPoint(e.clientX, e.clientY );
+				console.log(point);
+
+				drawMagnifier(true, point);
+			}
+		}
+
+		canvas.onmouseup = function(e) {
+			e.preventDefault();
+
+			isMouseDown = false;
+
+			clearCanvas();
+		}
+
+		canvas.onmouseenter = function(e) {
+			e.preventDefault();
+
+			if (e.buttons) {
+				isMouseDown = true;
+			}
+		}
+
+		canvas.onmouseout = function(e) {
+			e.preventDefault();
+
+			isMouseDown = false;
+
+			clearCanvas();
+		}
+
+		function drawMagnifier(iswork, point) {
+
+			clearCanvas();
+
+			var scale  = 2;
+
+			if ( iswork ) {
+				var imgScaleX = point.x * scale;
+				var imgScaleY = point.y * scale;
+
+				// 放大镜半径
+				var mw_R = 100;
+
+				var dx = point.x - mw_R;
+				var dy = point.y - mw_R;
+
+				Mctx.drawImage( img, point.x - mw_R/2, point.y - mw_R/2, mw_R, mw_R, 0, 0,  2* mw_R, 2* mw_R );
+
+				ctx.save();
+
+				ctx.lineWidth = 5;
+				ctx.strokeStyle = 'rgba(255,255,255,.3)';
+				ctx.beginPath();
+				ctx.arc( point.x, point.y, mw_R, 0, Math.PI * 2 );
+				ctx.stroke();
+				ctx.clip();
+
+				ctx.drawImage( Mcanvas, 0, 0, mw_R*2, mw_R*2, dx, dy,  2* mw_R, 2* mw_R );
+
+				ctx.restore();
+			}
+		}
+
+		// 恢复 canvas
+		function clearCanvas() {
+			ctx.clearRect(0, 0, canvas.width, canvas.height );
+			ctx.drawImage(img, 0, 0, img.width, img.height );
+		}
+
+	</script>
+</body>
+</html>
