@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>弧</title>
+</head>
+<body>
+	<canvas id="canvas" width="500" height="500"></canvas>
+</body>
+<script type="text/javascript">
+	var canvas = document.getElementById('canvas');
+	var ctx = canvas.getContext("2d");
+
+	ctx.fillStyle = "#ff0";
+	ctx.beginPath();
+	ctx.arc(100, 100, 50, 0, Math.PI*2, false);
+	ctx.closePath()
+
+	ctx.arc(220, 100, 50, 0, Math.PI, false);
+	ctx.closePath()
+	ctx.fill();
+
+	ctx.beginPath();
+	ctx.arc(220, 220, 50, Math.PI * .5, Math.PI* 1.9, false);
+	ctx.lineWidth = 10;
+	ctx.stroke();
+
+	// ctx.arcTo(0, 50, 50, 0, 50);
+	// ctx.closePath();
+</script>
+</html>
