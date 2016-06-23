@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<title>图片综合处理</title>
+	<link rel="stylesheet" href="css/layout.css">
+</head>
+<body>
+	<canvas id="canvas">
+		您的浏览器不支持 Canvas
+	</canvas>
+	<input type="range" id="scale-range" min="0.3" max="5.0" step="0.01" value="1.0" >
+
+	<script>
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext('2d');
+		var slider = document.getElementById('scale-range');
+		var img = new Image();
+
+		var canvasScalePoint;
+		var oldImgPoint;
+
+		var canvasInfo = {};
+
+		window.addEventListener('DOMContentLoaded', function() {
+
+			canvas.width = 600;
+			canvas.height = 600;
+
+			var scale = slider.value;
+
+			img.src = 'img/demo.png';
+			// img.src = 'img/grass.png';
+			img.onload = function() {
+				// ctx.drawImage(img, 0, 0, canvas.width, canvas.height )
+				// ctx.drawImage(img, 0, 0, img.width, img.height );
+
+				canvasInfo.imgX = img.width / 2;
+				canvasInfo.imgY = img.height / 2;
+
+				drawImgByScale(scale);
+
+				slider.onmousemove = function() {
+
+					drawImgByScale(this.value)
+					
+				}
+			};
+
+			// 缩放中心
+			canvasScalePoint = {
+				x : canvas.width / 2,
+				y : canvas.width / 2
+			}
+
+			canvas.onmousedown = function(e) {
+				canvasScalePoint = getCanvasPoint( e.clientX, e.clientY );
+				console.log(canvasScalePoint, slider.value);
+
+
+
+				// var toCanX = (canvas.width /2 - canvasScalePoint.x) / slider.value;
+				// var toCanY = (canvas.height /2 - canvasScalePoint.y) / slider.value;
+				// console.log('toCanX Y',toCanX, toCanY);
+
+				// var imgX = img.width  / 2 - toCanX;
+				// var imgY = img.height / 2 - toCanY;
+
+				// canvasInfo.imgX = imgX > img.width ? -1 : imgX;
+				// canvasInfo.imgY = imgY > img.height ? -1 : imgY;
+
+				// if (canvasInfo.imgX> 0 && canvasInfo.imgY > 0) {
+				// 	console.warn('ON IMG!!');
+				// 	canvasInfo.isOnIMG = true;
+				// } else {
+				// 	console.warn('OUT IMG!');
+				// 	canvasInfo.isOnIMG = false;
+
+				// }
+
+				var imgX = canvasInfo.sx + canvasScalePoint.x / slider.value;
+				var imgY = canvasInfo.sy + canvasScalePoint.y / slider.value;
+
+				canvasInfo.imgX = imgX;
+				canvasInfo.imgY = imgY;
+				console.log('imgX Y',imgX, imgY);
+
+
+			};
+
+
+			// canvas.onmousemove = function(e) {
+				
+			// 	canvasScalePoint = getCanvasPoint( e.clientX, e.clientY );
+			// 	console.log(canvasScalePoint, slider.value);
+
+			// 	// 鼠标到 Canvas 中心的距离
+			// 	var toCanX = (canvas.width /2 - canvasScalePoint.x) / slider.value;
+			// 	var toCanY = (canvas.height /2 - canvasScalePoint.y) / slider.value;
+			// 	console.log('toCanX Y',toCanX, toCanY);
+
+			// 	// 画布上的位置
+			// 	canvasInfo._canX = canvas.width / 2 - toCanX;
+			// 	canvasInfo._canY = canvas.height / 2 - toCanY;
+			// 	// console.info('_canX:',canvasInfo._canX, '_canY:', canvasInfo._canY)
+
+			// 	//得到在图片上的位置
+			// 	var imgX = img.width / 2 - toCanX;
+			// 	var imgY = img.height / 2 - toCanY;
+
+			// 	canvasInfo.imgX = imgX > img.width ? -1 : imgX;
+			// 	canvasInfo.imgY = imgY > img.height ? -1 : imgY;
+			// 	// console.log('imgX Y',imgX, imgY);
+
+			// 	if (canvasInfo.imgX> 0 && canvasInfo.imgY > 0) {
+			// 		console.warn('ON IMG!!');
+			// 		canvasInfo.isOnIMG = true;
+			// 	} else {
+			// 		console.warn('OUT IMG!');
+			// 		canvasInfo.isOnIMG = false;
+
+			// 	}
+
+			// 	console.log(canvasInfo);
+
+			// 	// drawImgByScale( slider.value )
+
+			// }
+
+			canvas.onmousewheel = function(e) {
+
+				e.preventDefault();
+
+				e = e || window.event;
+				var _scale = parseFloat(slider.value);
+				canvasScalePoint = getCanvasPoint( e.clientX, e.clientY );
+
+				// canvasScalePoint = getCanvasPoint( e.clientX, e.clientY );
+				// console.log(canvasScalePoint, slider.value);
+
+				// var toCanX = (canvas.width /2 - canvasScalePoint.x) / slider.value;
+				// var toCanY = (canvas.height /2 - canvasScalePoint.y) / slider.value;
+				// console.log('toCanX Y',toCanX, toCanY);
+
+				// var imgX = img.width / 2 - toCanX;
+				// var imgY = img.height / 2 - toCanY;
+
+				// canvasInfo.imgX = imgX > img.width ? -1 : imgX;
+				// canvasInfo.imgY = imgY > img.height ? -1 : imgY;
+				// console.log('imgX Y',imgX, imgY);
+
+				// if (canvasInfo.imgX> 0 && canvasInfo.imgY > 0) {
+				// 	console.warn('ON IMG!!');
+				// 	canvasInfo.isOnIMG = true;
+				// } else {
+				// 	console.warn('OUT IMG!');
+				// 	canvasInfo.isOnIMG = false;
+
+				// }
+
+				var imgX = canvasInfo.sx + canvasScalePoint.x / slider.value;
+				var imgY = canvasInfo.sy + canvasScalePoint.y / slider.value;
+
+				canvasInfo.imgX = imgX;
+				canvasInfo.imgY = imgY;
+				console.log('imgX Y',imgX, imgY);
+
+				if (e.wheelDelta) {
+					if (e.wheelDelta > 0) {
+						_scale += 0.1;
+					} else {
+						_scale -= 0.1;
+					}
+
+					slider.value = _scale;
+					drawImgByScale( _scale )
+				}
+			}
+		});
+
+		function drawImgByScale( scale ) {
+			var imgW = img.width;
+			var imgH = img.height;
+
+
+			var sw = canvas.width / scale;
+			var sh = canvas.height / scale;
+
+			// var sx = canvasScalePoint.x - canvasScalePoint.x/scale;
+			var sx = canvasInfo.imgX - canvasInfo.imgX/scale;
+			var sy = canvasInfo.imgY - canvasInfo.imgY/scale;;
+			// var sy = canvasInfo.sy + canvasScalePoint.y/scale;
+
+			console.log(sx, sy, sw, sh);
+
+			canvasInfo.sx = sx;
+			canvasInfo.sy = sy;
+			
+
+			// 清空原数据
+			ctx.clearRect(0, 0, canvas.width, canvas.height );
+
+			ctx.drawImage( img, sx, sy, sw , sh, 0, 0, canvas.width, canvas.height );
+		}
+
+		function getCanvasPoint (x, y) {
+			var canvasBoxInfo = canvas.getBoundingClientRect();
+			return {
+				x: x - canvasBoxInfo.left,
+				y: y - canvasBoxInfo.top
+			}
+		}
+
+	</script>
+</body>
+</html>

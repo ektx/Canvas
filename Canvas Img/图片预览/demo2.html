@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<title>图片综合处理</title>
+	<link rel="stylesheet" href="css/layout.css">
+</head>
+<body>
+	<canvas id="canvas">
+		您的浏览器不支持 Canvas
+	</canvas>
+	<input type="range" id="scale-range" min="0.3" max="5.0" step="0.01" value="1.0" >
+
+	<script>
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext('2d');
+		var slider = document.getElementById('scale-range');
+		var img = new Image();
+
+		var canvasScalePoint;
+		var oldImgPoint;
+
+		window.addEventListener('DOMContentLoaded', function() {
+
+			canvas.width = 600;
+			canvas.height = 600;
+
+			var scale = slider.value;
+
+			img.src = 'img/demo.png';
+			img.onload = function() {
+				// ctx.drawImage(img, 0, 0, canvas.width, canvas.height )
+				// ctx.drawImage(img, 0, 0, img.width, img.height );
+				drawImgByScale(scale);
+
+				slider.onmousemove = function() {
+
+					drawImgByScale(this.value)
+					
+				}
+			};
+
+			// 缩放中心
+			canvasScalePoint = {
+				x : canvas.width / 2,
+				y : canvas.width / 2
+			}
+
+			canvas.onmousedown = function(e) {
+				canvasScalePoint = getCanvasPoint( e.clientX, e.clientY );
+				console.log(canvasScalePoint);
+
+				// get img point
+
+
+			};
+
+
+			canvas.onmousemove = function(e) {
+				canvasScalePoint = getCanvasPoint( e.clientX, e.clientY );
+				drawImgByScale( slider.value )
+
+			}
+
+			canvas.onmousewheel = function(e) {
+
+				e.preventDefault();
+
+				e = e || window.event;
+				var _scale = parseFloat(slider.value);
+				canvasScalePoint = getCanvasPoint( e.clientX, e.clientY );
+
+				if (e.wheelDelta) {
+					if (e.wheelDelta > 0) {
+						_scale += 0.1;
+					} else {
+						_scale -= 0.1;
+					}
+
+					slider.value = _scale;
+					drawImgByScale( _scale )
+				}
+			}
+		});
+
+		function drawImgByScale( scale ) {
+			var imgW = img.width * scale;
+			var imgH = img.height * scale;
+			// var x = (canvas.width - imgW) / 2;
+			// var y = (canvas.height - imgH) / 2;
+			// console.log(x, y)
+
+			var x = parseInt( (canvas.width - imgW) * canvasScalePoint.x/canvas.width );
+			var y = parseInt( (canvas.height - imgH) * canvasScalePoint.y/canvas.height );
+
+			oldImgPoint = {
+				x: x,
+				y: y
+			}
+
+			console.log(x, y)
+
+			// 清空原数据
+			ctx.clearRect(0, 0, canvas.width, canvas.height );
+
+			ctx.drawImage( img, x, y, imgW, imgH );
+		}
+
+		function getCanvasPoint (x, y) {
+			var canvasBoxInfo = canvas.getBoundingClientRect();
+			return {
+				x: x - canvasBoxInfo.left,
+				y: y - canvasBoxInfo.top
+			}
+		}
+
+	</script>
+</body>
+</html>
