@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>仪表盘</title>
+</head>
+<body>
+	<canvas id="canvas" width="300" height="300"></canvas>
+
+	<script>
+	function dashboard(id, board) {
+		var canvas = document.getElementById(id);
+		var ctx = canvas.getContext('2d');
+		// 半径
+		var R = board.R || 100;
+		// 进度, 0-100
+		var progress = board.progress || {};
+		var proTxt = progress.txt || 0;
+
+		// 方向
+		var anticlockwise = board.anticlockwise || false;
+		// 进度条宽
+		var lineW = board.lineW || 0;
+		// 进度条颜色
+		var lineColor = board.lineColor || '#09f';
+		// 提示内容
+		var txt = board.txt || '进度条';
+		var color = board.color || '#fff';
+		var font = board.font || '14px Arial';
+		// 起启位置
+		var start = board.start || 0;
+		
+		var end = proTxt/100 * 360;
+		var endDeg = 0;
+		var startDeg = Math.PI * (start / 180) || 0;
+
+		var drawFont = function(txt, color, font, top, left) {
+			left = left || 0;
+			top = top || 0;
+
+			console.log(txt, color, font, top, left);
+
+			ctx.fillStyle = color || '#FFF';
+			ctx.font = font || '14px Arial';
+			ctx.textAlign = 'center';
+			ctx.fillText(txt, canvas.width/2 + left, canvas.height/2+ top);
+		}
+
+		// 优化 100% 时无法出现进度条
+		if (end == 360) anticlockwise = false;
+
+		if (anticlockwise) {
+			endDeg = Math.PI * ( (360 - end + start) / 180);
+		} else {
+			endDeg = Math.PI * (end / 180) + startDeg
+		}
+
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+		// 中心盘
+		ctx.fillStyle = '#f90';
+		ctx.beginPath();
+		ctx.arc(150, 150, R, 0, Math.PI*2, false);
+		ctx.fill();
+
+		// 进度条
+		ctx.strokeStyle = lineColor;
+		ctx.beginPath();
+		ctx.arc(150, 150, R+ lineW/2, startDeg, endDeg, anticlockwise);
+		ctx.lineWidth = lineW;
+		ctx.stroke();
+
+		// 提示文字
+		var txtSize = Number(font.match(/\d+(?=px)/)[0]);
+		drawFont(txt, color, font, txtSize);
+
+		drawFont(proTxt, progress.color, progress.font, progress.top, progress.left);
+
+		var perSize = Number(progress.font.match(/\d+(?=px)/)[0]);
+		var perFont = progress.font.replace(perSize, perSize/2);
+		console.log()
+		// drawFont('%', progress.color, perFont, -perSize/2, Math.ceil(ctx.measureText(proTxt).width) )
+		drawFont('%', progress.color, perFont, -25, 50 )
+
+	}
+
+
+	dashboard('canvas', {
+		R: 100,
+		progress: {
+			txt: 10,
+			font: '60px arial',
+			top: -5,
+			left: -15
+		},
+		lineW: 10,
+		start: 90,
+		anticlockwise: true
+	});
+
+	</script>
+</body>
+</html>
