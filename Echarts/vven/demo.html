@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>venn</title>
+	<style>
+	body, div {
+		margin: 0;
+		padding: 0;
+	}
+	#echart,
+	#venn {
+		width: 100vw;
+		height: 100vh;
+	}
+	</style>
+</head>
+<body>
+	
+
+	<!-- echart 点位元素 -->
+	<div id="echart"></div>
+
+	<div id="venn"></div>
+
+
+	<script src="../js/echarts.min.js"></script>
+	<script>var e3 = echarts</script>
+	<script src="../js/2.0/echarts-all.js"></script>
+	<script src="../js/iecharts.js"></script>
+
+	<script>
+		console.log(echarts)
+
+
+
+	// 设置参数
+	// ---------------------------------------------------------------
+	option = {
+		xName: '平均活跃值',
+		yName: '平均贡献值',
+		max: 200,
+		color: '#4bbcf6',
+		formatter: function(params) {
+			if (params.value.length > 1) {
+	            return '活跃值: ' + params.value[0] + 'w <br/>贡献值: '
+	               + params.value[1] + 'w ';
+        		
+        	} 
+        	// 显示坐标
+        	else {
+        		return params.name
+        	}
+        },
+		data: [
+				{
+					name:'舟山',
+					value: [30,50]
+				},
+				{
+					name:'杭州',
+					value: [50,150]
+				},
+				{
+					name:'上海',
+					value: [120,50]
+				}
+			]
+	}
+
+	getAverageChart('echart', option, e3);
+
+
+	option2 = {
+		title: {
+		        text: '访问 vs 咨询',
+		        subtext: '各个数据的集合'
+		    },
+		name: '韦恩图',
+		hover: {
+			borderWidth: 3,
+			borderColor: '#996699'
+		},
+		data: [
+                {
+                	value:100, 
+                	name:'访问',
+                	color: '#f90'
+                },
+                {
+                	value:50, 
+                	name:'咨询', 
+                	color: '#c30'
+                },
+                {	
+                	value:20, 
+                	name:'公共',
+                	color: '#09f'
+                }
+            ]
+	}
+
+	vennEcharts('venn', option2, echarts)
+	</script>
+</body>
+</html>

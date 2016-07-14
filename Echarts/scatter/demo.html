@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Scatter</title>
+	<style>
+	body, div {
+		margin: 0;
+		padding: 0;
+	}
+	#echart {
+		width: 100vw;
+		height: 100vh;
+	}
+	</style>
+</head>
+<body>
+	<!-- echart 点位元素 -->
+	<div id="echart"></div>
+
+	<script src="../js/echarts.min.js"></script>
+
+	<script>
+	/*
+		获取平均分布图片
+		--------------------------------------------
+		@id: 生成的元素
+		@options: 传入的内容
+
+		Eg: 在 div 为 echart 中生成以下内容
+		---------------------------------------------
+		<div id="echart"></div>
+
+		option = {
+			xName: '平均活跃值',
+			yName: '平均贡献值',
+			max: 200,
+			color: '#4bbcf6',
+			formatter: function(params) {
+				if (params.value.length > 1) {
+		            return '活跃值: ' + params.value[0] + 'w <br/>贡献值: '
+		               + params.value[1] + 'w ';
+	        		
+	        	} 
+	        	// 显示坐标
+	        	else {
+	        		return params.name
+	        	}
+	        },
+			data: [
+					{
+						name:'舟山',
+						value: [30,50]
+					},
+					{
+						name:'杭州',
+						value: [50,150]
+					},
+					{
+						name:'上海',
+						value: [120,50]
+					}
+				]
+		}
+
+		getAverageChart('echart', option);
+		--------------------------------------------
+		zwl <530675800@qq.com>             2016.7.14
+	*/
+	function getAverageChart(id, options) {
+
+		var myEchart = echarts.init(document.getElementById(id));
+		var xyStyle = {
+		            type : 'value',
+		            scale:true,
+		            splitLine: {
+		            	show: false
+		            },
+		            axisLine: {
+		            	show: false
+		            },
+		            axisLabel: {
+		            	show: false
+		            },
+		            axisTick: {
+		            	show: false
+		            }
+		        };
+
+		option = {
+		    grid: {
+		        left: '3%',
+		        right: '7%',
+		        bottom: '3%',
+		        containLabel: true
+		    },
+		    tooltip : {
+		        trigger: 'axis',
+		        showDelay : 0,
+		        formatter : function (params) {
+		        	return options.formatter(params)
+		        },
+		        axisPointer:{
+		            show: true,
+		            type : 'cross',
+		            lineStyle: {
+		                type : 'dashed',
+		                width : 1
+		            }
+		        }
+		    },
+		    toolbox: {
+		        feature: {
+		            dataZoom: {},
+		            brush: {
+		                type: ['rect', 'polygon', 'clear']
+		            }
+		        }
+		    },
+		    brush: {
+		    },
+		    xAxis : [
+		        xyStyle
+		    ],
+		    yAxis : [
+		        xyStyle
+		    ],
+		    series : [
+		        {
+		            name:'',
+		            symbol:'rect',
+		            type:'scatter',
+		            data: [
+		            	[0, options.max],
+		            	[0,0],
+		            	[options.max, 0],
+		            	[options.max, options.max]
+		            ],
+		            itemStyle: {
+		            	normal: {
+		            		color: options.color,
+		            		opacity: 0
+		            	}
+		            },
+		            markLine : {
+		                lineStyle: {
+		                    normal: {
+		                        type: 'solid',
+		                    }
+		                },
+		                data : [
+		                    {
+		                    	yAxis: options.max/2,
+		                    	name: options.yName
+		                   	},
+		                    { 
+		                    	xAxis: options.max/2, 
+		                    	name: options.xName
+		                    }
+		                ]
+		            }
+		        },
+		        {
+			        label:{
+			        	normal: {
+				        	show: true,
+				        	position: 'right',
+			        		formatter: '{b}',
+			        		textStyle: {
+			        			color: '#333'
+			        		}
+			        	}
+			        },
+		            type:'scatter',
+		            itemStyle: {
+		            	normal: {
+		            		color: options.color
+		            	}
+		            },
+		            data: option.data
+		        }
+		    ]
+		};
+
+
+		myEchart.setOption(option);
+	}
+
+
+	// 设置参数
+	// ---------------------------------------------------------------
+	option = {
+		xName: '平均活跃值',
+		yName: '平均贡献值',
+		max: 200,
+		color: '#4bbcf6',
+		formatter: function(params) {
+			if (params.value.length > 1) {
+	            return '活跃值: ' + params.value[0] + 'w <br/>贡献值: '
+	               + params.value[1] + 'w ';
+        		
+        	} 
+        	// 显示坐标
+        	else {
+        		return params.name
+        	}
+        },
+		data: [
+				{
+					name:'舟山',
+					value: [30,50]
+				},
+				{
+					name:'杭州',
+					value: [50,150]
+				},
+				{
+					name:'上海',
+					value: [120,50]
+				}
+			]
+	}
+
+	getAverageChart('echart', option);
+	</script>
+</body>
+</html>

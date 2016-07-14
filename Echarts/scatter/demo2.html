@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Scatter</title>
+	<style>
+	body, div {
+		margin: 0;
+		padding: 0;
+	}
+	#echart {
+		width: 100vw;
+		height: 100vh;
+	}
+	</style>
+</head>
+<body>
+	<!-- echart 点位元素 -->
+	<div id="echart"></div>
+
+	<script src="../js/echarts.min.js"></script>
+
+	<script>
+		var myEchart = echarts.init(document.getElementById('echart'));
+
+option = {
+    title : {
+        text: '区域用户行为指标',
+        subtext: 'Demo'
+    },
+    grid: {
+    	show: true,
+        left: '3%',
+        right: '7%',
+        bottom: '3%',
+        borderWidth: 0,
+        containLabel: true
+        // backgroundColor: '#fff'
+    },
+    tooltip : {
+        trigger: 'axis',
+        showDelay : 0,
+        backgroundColor: 'rgba(255, 255, 255, .9)',
+        borderColor: '#4bbcf6',
+        borderWidth: 1,
+        textStyle: {
+        	color: '#4bbcf6'
+        },
+        formatter : function (params) {
+        	console.log(params.name)
+        	if (params.value.length > 1) {
+	            return '活跃值: ' + params.value[0] + 'w <br/>贡献值: '
+	               + params.value[1] + 'w ';
+        		
+        	} 
+        	// 显示坐标
+        	else {
+        		return params.name + ': ' + params.value + 'w'
+        	}
+        },
+        axisPointer:{
+            show: true,
+            type : 'cross',
+            lineStyle: {
+                type : 'dashed',
+                width : 1
+            }
+        }
+    },
+    toolbox: {
+        feature: {
+            dataZoom: {},
+            brush: {
+                type: ['rect', 'polygon', 'clear']
+            }
+        }
+    },
+    brush: {
+    },
+    xAxis : [
+        {
+            type : 'value',
+            scale:true
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value',
+            scale:true
+        }
+    ],
+    series : [
+        {
+	        label:{
+	        	normal: {
+		        	show: true,
+		        	position: 'right',
+	        		formatter: '{b}',
+	        		textStyle: {
+	        			color: '#333'
+	        		}
+	        	}
+	        },
+            type:'scatter',
+            itemStyle: {
+            	normal: {
+            		color: '#4bbcf6'
+            	}
+            },
+             markLine : {
+                lineStyle: {
+                    normal: {
+                        type: 'solid'
+                    }
+                },
+                label: {
+                	normal: {
+                		// show: false
+                	}
+                },
+                data : [
+                    {
+                    	type: 'average',
+                    	name: '平均贡献值'
+                   	},
+                    { 
+                    	type: 'average',
+                    	valueIndex: 0,
+                    	name: '平均活跃值' 
+                    }
+                ]
+            },
+            data: [
+				{
+					name:'舟山',
+					value: [30,50]
+				},
+				{
+					name:'杭州',
+					value: [50,150]
+				},
+				{
+					name:'上海',
+					value: [120,50]
+				}
+            ]
+        }
+    ]
+};
+
+
+		myEchart.setOption(option);
+	</script>
+</body>
+</html>
