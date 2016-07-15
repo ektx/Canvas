@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Scatter</title>
+	<style>
+	body, div {
+		margin: 0;
+		padding: 0;
+	}
+	#echart {
+		width: 100vw;
+		height: 100vh;
+	}
+	</style>
+</head>
+<body>
+	<!-- echart 点位元素 -->
+	<div id="echart"></div>
+
+	<script src="../js/echarts.min.js"></script>
+
+	<script>
+		var myEchart = echarts.init(document.getElementById('echart'));
+
+function randomData() {
+    now = new Date(+now + oneDay);
+    value = value + Math.random() * 210 - 100;
+    return {
+        name: now.toString(),
+        value: [
+            [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/')+' ' + now.getHours()+':'+now.getMinutes(),
+            Math.round(value)
+        ]
+    }
+}
+
+function getTimeArr() {
+	if (timeArr.length > 40) {
+		timeArr.shift()
+	};
+
+	return [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/')+' ' + now.getHours()+':'+now.getMinutes() 
+}
+
+var data = [];
+var timeArr = [];
+var now = +new Date(2016, 6, 15);
+var oneDay = 10*60 * 1000;
+var value = Math.random() * 1000;
+
+// 默认生成36点
+for (var i = 0; i < 36; i++) {
+    data.push(randomData());
+    timeArr.push( getTimeArr() );
+}
+
+console.log(data, timeArr)
+option = {
+    title: {
+        text: '动态数据 + 时间坐标轴'
+    },
+    tooltip: {
+        trigger: 'axis',
+        formatter: function (params) {
+            params = params[0];
+            var date = new Date(params.name);
+            return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() +' '+ date.getHours() +' : '+ date.getMinutes() +' ' + params.value[1];
+        },
+        axisPointer: {
+            animation: false
+        }
+    },
+    xAxis: {
+    	name: 'sas',
+        type: 'category',
+        axisTick: {
+        	length: 5
+        },
+        splitLine: {
+            show: false
+        },
+        data: timeArr
+    },
+    yAxis: {
+        type: 'value',
+        boundaryGap: [0, '100%'],
+        splitLine: {
+            show: true
+        },
+        axisLine: {
+        	show: false
+        },
+        axisTick: {
+        	length: 0
+        }
+    },
+    series: [{
+        name: '模拟数据',
+        type: 'line',
+        showSymbol: false,
+        hoverAnimation: false,
+        data: data
+    }]
+};
+
+myEchart.setOption(option)
+
+timeTicket = setInterval(function () {
+
+    for (var i = 0; i < 1; i++) {
+        data.shift();
+        data.push(randomData());
+        timeArr.push( getTimeArr() );
+    }
+
+    myEchart.setOption(
+    	{xAxis: {
+			data: timeArr
+	    },
+        series: [{
+            data: data
+        }]
+    });
+}, 1000);
+
+	</script>
+</body>
+</html>
