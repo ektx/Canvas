@@ -183,38 +183,36 @@
 	<div id="echart"></div>
 	
 	option = {
-		xName: '平均活跃值',
-		yName: '平均贡献值',
-		max: 200,
-		color: '#4bbcf6',
-		formatter: function(params) {
-			if (params.value.length > 1) {
-	            return '活跃值: ' + params.value[0] + 'w <br/>贡献值: '
-	               + params.value[1] + 'w ';
-        		
-        	} 
-        	// 显示坐标
-        	else {
-        		return params.name
-        	}
-        },
+		title: {
+		        text: '标题',
+		        subtext: '副标题'
+		    },
+		// 鼠标放上效果
+		hover: {
+			borderWidth: 3, // [Number] 宽度
+			borderColor: '#996699' // [color] 颜色
+		},
+		// 数据[必填]
 		data: [
-				{
-					name:'舟山',
-					value: [30,50]
-				},
-				{
-					name:'杭州',
-					value: [50,150]
-				},
-				{
-					name:'上海',
-					value: [120,50]
-				}
-			]
+                {
+                	value: 100, 
+                	name:'访问',
+                	color: '#f90'
+                },
+                {
+                	value:50, 
+                	name:'咨询', 
+                	color: '#c30'
+                },
+                {	
+                	value:20, 
+                	name:'公共',
+                	color: '#09f'
+                }
+            ]
 	}
 
-	getAverageChart('echart', option);
+	vennEcharts('venn', option, e2);
 	--------------------------------------------
 	zwl <530675800@qq.com>             2016.7.14
 */

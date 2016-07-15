@@ -25,14 +25,14 @@
 
 
 	<script src="../js/echarts.min.js"></script>
-	<script>var e3 = echarts</script>
+	<script>var e3 = echarts; delete echarts;</script>
 	<script src="../js/2.0/echarts-all.js"></script>
+	<script>var e2 = echarts; delete echarts;</script>
+
+
 	<script src="../js/iecharts.js"></script>
 
 	<script>
-		console.log(echarts)
-
-
 
 	// 设置参数
 	// ---------------------------------------------------------------
@@ -76,7 +76,6 @@
 		        text: '访问 vs 咨询',
 		        subtext: '各个数据的集合'
 		    },
-		name: '韦恩图',
 		hover: {
 			borderWidth: 3,
 			borderColor: '#996699'
@@ -100,7 +99,7 @@
             ]
 	}
 
-	vennEcharts('venn', option2, echarts)
+	vennEcharts('venn', option2, e2);
 	</script>
 </body>
 </html>
