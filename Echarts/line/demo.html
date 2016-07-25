@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Scatter</title>
+	<title>line</title>
 	<style>
 	body, div {
 		margin: 0;
@@ -19,110 +19,69 @@
 	<div id="echart"></div>
 
 	<script src="../js/echarts.min.js"></script>
+	<script src="../js/iecharts.js"></script>
 
 	<script>
-		var myEchart = echarts.init(document.getElementById('echart'));
 
-function randomData() {
-    now = new Date(+now + oneDay);
-    value = value + Math.random() * 210 - 100;
-    return {
-        name: now.toString(),
-        value: [
-            [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/')+' ' + now.getHours()+':'+now.getMinutes(),
-            Math.round(value)
-        ]
+    // 生成随机数 [可删除]
+    function randomData() {
+        now = new Date(+now + tenMinutes);
+        value = value + Math.random() * 210 - 100;
+        return {
+            name: now.toString(),
+            value: [
+                [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/')+' ' + now.getHours()+':'+now.getMinutes(),
+                Math.round(value)
+            ]
+        }
     }
-}
 
-function getTimeArr() {
-	if (timeArr.length > 40) {
-		timeArr.shift()
-	};
+    // 模拟数据 [可删除]
+    var data = [];
+    // 模拟开始时间 [可删除]
+    var now = +new Date(2016, 6, 15);
+    // 设置每10分钟一个数据 [可删除]
+    var tenMinutes = 10*60 * 1000;
+    // 生成默认值 [可删除]
+    var value = Math.random() * 1000;
 
-	return [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/')+' ' + now.getHours()+':'+now.getMinutes() 
-}
 
-var data = [];
-var timeArr = [];
-var now = +new Date(2016, 6, 15);
-var oneDay = 10*60 * 1000;
-var value = Math.random() * 1000;
+    // 生成36个数据[可删除]
+    for (var i = 0; i < 36; i++) {
+        data.push(randomData());
+    }
 
-// 默认生成36点
-for (var i = 0; i < 36; i++) {
-    data.push(randomData());
-    timeArr.push( getTimeArr() );
-}
-
-console.log(data, timeArr)
-option = {
-    title: {
-        text: '动态数据 + 时间坐标轴'
-    },
-    tooltip: {
-        trigger: 'axis',
-        formatter: function (params) {
+    // 配置文件，可以直接使用
+    options = {
+        title: {
+            text: '动态数据 + 时间坐标轴',
+        },
+        color: '#f90',
+        formatter: function(params) {
             params = params[0];
             var date = new Date(params.name);
             return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() +' '+ date.getHours() +' : '+ date.getMinutes() +' ' + params.value[1];
         },
-        axisPointer: {
-            animation: false
-        }
-    },
-    xAxis: {
-    	name: 'sas',
-        type: 'category',
-        axisTick: {
-        	length: 5
-        },
-        splitLine: {
-            show: false
-        },
-        data: timeArr
-    },
-    yAxis: {
-        type: 'value',
-        boundaryGap: [0, '100%'],
-        splitLine: {
-            show: true
-        },
-        axisLine: {
-        	show: false
-        },
-        axisTick: {
-        	length: 0
-        }
-    },
-    series: [{
-        name: '模拟数据',
-        type: 'line',
-        showSymbol: false,
-        hoverAnimation: false,
         data: data
-    }]
-};
-
-myEchart.setOption(option)
-
-timeTicket = setInterval(function () {
-
-    for (var i = 0; i < 1; i++) {
-        data.shift();
-        data.push(randomData());
-        timeArr.push( getTimeArr() );
     }
 
-    myEchart.setOption(
-    	{xAxis: {
-			data: timeArr
-	    },
-        series: [{
-            data: data
-        }]
-    });
-}, 1000);
+    // 获取动态更新对象;如果你中是一次调用数据
+    // 就不用设变量获取对象：  getLineCharts('echart', options) 就可以了
+    var myLineChart = getLineCharts('echart', options);
+
+    // 模拟 Ajax 动态加载 [可删除]
+    timeTicket = setInterval(function () {
+
+        // 动态加载的新数据
+        for (var i = 0; i < 1; i++) {
+            data.shift();
+            data.push(randomData());
+        }
+
+        // 更新数据
+        myLineChart(data)
+
+    }, 1000 );
 
 	</script>
 </body>

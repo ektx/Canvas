@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>仪表盘</title>
+</head>
+<body>
+	<canvas id="canvas" width="300" height="300"></canvas>
+
+	<script src="dashboard2.js"></script>
+	<script>
+
+
+	// dashboard('canvas', {
+	// 	bgColor: '#095',
+	// 	// 进度条
+	// 	progress: {
+	// 		value: 91.53,            // 进度
+	// 		barColor: '#c00',   // 进度条颜色,默认蓝色
+	// 		barW: 10,			// 进度条宽
+	// 		barBG: true,		// 进度条背景
+	// 		barBgColor: '#f90'
+	// 	},
+	// 	text: [
+	// 		{
+	// 			value: '91.53',
+	// 			color: '#fff',
+	// 			fontSize: '42px',
+	// 			top: -20,
+	// 			left: 0
+	// 		},
+	// 		{
+	// 			value: '%',
+	// 			color: '#fff',
+	// 			fontSize: '12px',
+	// 			top: -40,
+	// 			left: 60
+	// 		},
+	// 		{
+	// 			value: '说的什么好呢？',
+	// 			color: '#fff',
+	// 			fontSize: '24px',
+	// 			top: 40
+	// 		},
+	// 		{
+	// 			value: '说的什么好呢？',
+	// 			color: '#fff',
+	// 			fontSize: '12px',
+	// 			top: 60
+	// 		}
+	// 	],
+	// 	// 进度条方向 true 为逆时针, false 为顺时针（默认）
+	// 	anticlockwise: true
+	// });
+
+
+	options = {
+		bgColor: '#095',
+		// 进度条
+		progress: {
+			value: 91.53,            // 进度
+			barColor: '#c00',   // 进度条颜色,默认蓝色
+			barW: 10,			// 进度条宽
+			barBG: true,		// 进度条背景
+			barBgColor: '#f90'
+		},
+		text: [
+			{
+				value: '91.53',
+				color: '#fff',
+				fontSize: '42px',
+				top: -20,
+				left: 0
+			},
+			{
+				value: '%',
+				color: '#fff',
+				fontSize: '12px',
+				top: -40,
+				left: 60
+			},
+			{
+				value: '说的什么好呢？',
+				color: '#fff',
+				fontSize: '24px',
+				top: 40
+			},
+			{
+				value: '说的什么好呢？',
+				color: '#fff',
+				fontSize: '12px',
+				top: 60
+			}
+		],
+		// 进度条方向 true 为逆时针, false 为顺时针（默认）
+		anticlockwise: true
+	};
+
+	var callback = function(board, newVal) {
+		board.progress.value = newVal;
+		board.text[0].value = (newVal).toFixed(2);
+
+		return board;
+	}
+
+	aniDashboard('canvas', options, 3000, callback);
+
+	</script>
+</body>
+</html>

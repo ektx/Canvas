@@ -10,9 +10,16 @@
 	<div id="echart"></div>
 	
 	option = {
-		xName: '平均活跃值',
-		yName: '平均贡献值',
-		max: 200,
+		x:{
+			name: '平均活跃值',
+			value: 150 // 
+		},
+		y: {
+			name: '平均贡献值',
+			value: 200,
+			// 用于处理值过长的问题,默认宽为 30px
+			width: '60px'
+		},
 		color: '#4bbcf6',
 		formatter: function(params) {
 			if (params.value.length > 1) {
@@ -69,7 +76,7 @@
 		option = {
 		    grid: {
 		        left: '0%',
-		        right: '7%',
+		        right: options.y.width || '30px',
 		        bottom: '0%',
 		        containLabel: true
 		    },
@@ -116,10 +123,10 @@
 		            symbol:'rect',
 		            type:'scatter',
 		            data: [
-		            	[0, options.max],
 		            	[0,0],
-		            	[options.max, 0],
-		            	[options.max, options.max]
+		            	[0, options.y.value * 2],
+		            	[options.x.value * 2, 0],
+		            	[options.x.value * 2, options.y.value * 2]
 		            ],
 		            itemStyle: {
 		            	normal: {
@@ -135,12 +142,12 @@
 		                },
 		                data : [
 		                    {
-		                    	yAxis: options.max/2,
-		                    	name: options.yName
+		                    	yAxis: options.y.value,
+		                    	name: options.y.name
 		                   	},
 		                    { 
-		                    	xAxis: options.max/2, 
-		                    	name: options.xName
+		                    	xAxis: options.x.value, 
+		                    	name: options.x.name
 		                    }
 		                ]
 		            }
@@ -167,7 +174,6 @@
 		    ]
 		};
 
-
 		myEchart.setOption(option);
 	}
 
@@ -192,6 +198,7 @@
 			borderWidth: 3, // [Number] 宽度
 			borderColor: '#996699' // [color] 颜色
 		},
+		dataName: false, // 是否显示 data name
 		// 数据[必填]
 		data: [
                 {
@@ -212,13 +219,14 @@
             ]
 	}
 
-	vennEcharts('venn', option, e2);
+	vennEcharts('echart', option, e2);
 	--------------------------------------------
 	zwl <530675800@qq.com>             2016.7.14
 */
 function vennEcharts(id, options, version) {
 
-	var venn = getVersionEC (id, version);;
+	var venn = getVersionEC (id, version);
+	var isShowDataName = !options.dataName ? options.dataName: true;
 	var data = [];
 
 	for (var i = 0; i < options.data.length; i++) {
@@ -227,7 +235,7 @@ function vennEcharts(id, options, version) {
 			value: options.data[i].value,
 			itemStyle: {
 				normal: {
-					color: options.data[i].color
+					color: options.data[i].color,
 				},
 				emphasis: {
 					color: options.data[i].color
@@ -243,15 +251,12 @@ function vennEcharts(id, options, version) {
 	        formatter: "{b}: {c}"
 	    },
 	    toolbox: {
-	        show : true,
-	        feature : {
-	            mark : {show: true},
-	            dataView : {show: true, readOnly: false},
-	            restore : {show: true},
-	            saveAsImage : {show: true}
-	        }
+	        show : false
 	    },
 	    calculable : false,
+	    markPoin: {
+	    	symbol: 'pin'
+	    },
 	    series : [
 	        {
 	            name: options.name,
@@ -259,7 +264,7 @@ function vennEcharts(id, options, version) {
 	            itemStyle: {
 	                normal: {
 	                    label: {
-	                        show: true,
+	                        show: isShowDataName,
 	                        textStyle: {
 	                            fontFamily: 'Arial, Verdana, sans-serif',
 	                            fontSize: 16,
@@ -291,6 +296,120 @@ function vennEcharts(id, options, version) {
 
 
 /*
+	Echarts 线形图
+	--------------------------------------------
+	@id: 生成的元素
+	@options: 传入的内容
+	@version: 解决 2 3 共享问题
+
+	Eg: 在 div 为 echart 中生成以下内容
+	---------------------------------------------
+	<div id="echart"></div>
+	
+	options = {
+		title: {
+			text: '标题',
+			subtext: '副标题'
+		},
+		color: '#f90', // [color] 颜色
+		formatter: function(params) {
+			return // 你的鼠标提示功能
+		},
+		// 数据[必填]
+		data: data
+	}
+
+	vennEcharts('echart', option, e3);
+	--------------------------------------------
+	zwl <530675800@qq.com>             2016.7.18
+*/
+function getLineCharts(id, options, version) {
+
+	var myEchart = getVersionEC (id, version);
+	var xType = 'category';
+
+	var getXTime = function(data) {
+		var XData = [];
+		for (var i = 0; i < data.length; i++) {
+			XData.push( data[i].value[0] )
+		}
+		return XData;
+	}
+
+	option = {
+	    title: options.title,
+	    grid: {
+		        left: '1%',
+		        right: '0%',
+		        bottom: '1%',
+		        top: '10%',
+		        containLabel: true
+		    },
+	    tooltip: {
+	        trigger: 'axis',
+	        formatter: function (params) {
+	            return options.formatter(params)
+	        },
+	        axisPointer: {
+	            animation: false
+	        }
+	    },
+	    xAxis: {
+	        type: xType,
+	        axisTick: {
+	        	length: 5
+	        },
+	        splitLine: {
+	            show: false
+	        },
+	        data: getXTime(options.data)
+	    },
+	    yAxis: {
+	        type: 'value',
+	        boundaryGap: [0, '100%'],
+	        splitLine: {
+	            show: true
+	        },
+	        axisLine: {
+	        	show: false
+	        },
+	        axisTick: {
+	        	length: 0
+	        }
+	    },
+	    itemStyle: {
+	    	normal: {
+		    	color: options.color
+	    		
+	    	}
+	    },
+	    series: [{
+	        type: 'line',
+	        showSymbol: false,
+	        hoverAnimation: true,
+	        data: options.data
+	    }]
+	};
+
+	myEchart.setOption(option);
+
+	var updateData = function(data) {
+		myEchart.setOption({
+			xAxis: {
+				data: getXTime(data)
+			},
+			series: [{
+				data:  data
+			}]
+		})
+	};
+
+	return updateData
+}
+
+
+
+/*
 	统一处理echarts 2 或 3的转换
 	@id 元素
 	@version 指定版本，默认使用最后调用的echarts
@@ -303,7 +422,7 @@ function getVersionEC (id, version) {
 	if (version) {
 		myEchart = version.init(document.getElementById(id));
 	} else {
-		myEchart = echart.init(document.getElementById(id));
+		myEchart = echarts.init(document.getElementById(id));
 	}
 
 	return myEchart;

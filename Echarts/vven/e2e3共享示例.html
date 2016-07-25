@@ -37,13 +37,18 @@
 	// 设置参数
 	// ---------------------------------------------------------------
 	option = {
-		xName: '平均活跃值',
-		yName: '平均贡献值',
-		max: 200,
+		x: {
+            name: '平均活跃值',
+            value: 1500
+        },
+		y: {
+            name: '平均贡献值',
+            value: 335
+        },
 		color: '#4bbcf6',
 		formatter: function(params) {
 			if (params.value.length > 1) {
-	            return '活跃值: ' + params.value[0] + 'w <br/>贡献值: '
+	            return params.name + '<br/> 活跃值: ' + params.value[0] + 'w <br/>贡献值: '
 	               + params.value[1] + 'w ';
         		
         	} 

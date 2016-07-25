@@ -15,7 +15,8 @@ dashboard('canvas', {
 		color: '#c00',      // 文字颜色
 		barColor: '#c00',   // 进度条颜色,默认蓝色
 		barW: 30,			// 进度条宽
-		barBG: false		// 进度条背景
+		barBG: false		// 进度条背景是否显示
+		barBgColor: '#eee'  // 进度条背景色
 	},
 	// 百分号
 	per: {
@@ -53,6 +54,8 @@ function dashboard(id, board) {
 
 	// 起启位置
 	var start = board.start || 0;
+
+	var barBgColor = progress.barBgColor || '#eee';
 	
 	var end = proTxt/100 * 360;
 	var endDeg = 0;
@@ -106,7 +109,7 @@ function dashboard(id, board) {
 	var lineColor = progress.barColor || '#09f';
 	// 进度条背景
 	if (progress.barBG) {
-		drawBar(x, y, R+ lineW/2, 0, Math.PI*2, false, '#eee');
+		drawBar(x, y, R+ lineW/2, 0, Math.PI*2, false, barBgColor);
 	}
 	// 进度条
 	drawBar(x, y, R+ lineW/2, startDeg, endDeg, anticlockwise, lineColor);
