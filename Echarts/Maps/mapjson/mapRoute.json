@@ -1,0 +1,7 @@
+{
+	"world": "earth/world.json",
+	"china": "earth/world/china.json",
+	"anhui": "earth/world/china/anhui.json",
+	"zhejiang": "earth/world/china/zhejiang.json",
+	"jiangxi": "earth/world/china/jiangxi.json"
+}

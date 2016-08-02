@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>China</title>
+</head>
+<body>
+
+	<!-- 为 EChart -->
+	<div id="main" style="width: 800px; height: 600px "></div>
+	
+	<script src="../../jquery-1.11.1.min.js"></script>
+	<script src="../../echartsAll.min.js"></script>
+	
+	<script>
+
+		$.get('../../map/anhui.json', function(mapJson) {
+
+			echarts.registerMap('anhui', mapJson)
+
+			var myEChart = echarts.init(document.getElementById('main'));
+
+			// 指定图表的配置和数据
+			option = {
+				    tooltip: {
+				        trigger: 'item',
+				        formatter: '{b}'
+				    },
+				    visualMap: {
+				    	min: 0,
+				    	max: 400000,
+				    	left: 'left',
+				    	top: 'bottom',
+				    	text: ['高', '低'],
+				    	calculable: true
+				    },
+				    legend: {
+				    	left: 'left',
+				    	orient: 'vertical',
+				    	data: ['男生', '女生']
+				    },
+				    series: [
+				        {
+				            name: '男生',
+				            type: 'map',
+				            mapType: 'anhui',
+				            selectedMode : 'multiple',
+				            label: {
+				                normal: {
+				                    show: true
+				                },
+				                emphasis: {
+				                    show: true
+				                }
+				            },
+				            data:[
+				                {name:'铜陵市', value: 50000},
+				                {name:'黄山市', value: 30000}
+				            ]
+				        },
+				        {
+				            name: '女生',
+				            type: 'map',
+				            mapType: 'anhui',
+				            selectedMode : 'multiple',
+				            label: {
+				                normal: {
+				                    show: true
+				                },
+				                emphasis: {
+				                    show: true
+				                }
+				            },
+				            data:[
+				                {name:'铜陵市', value: 120000},
+				                {name:'黄山市', value: 320000}
+				            ]
+				        }
+				    ]
+				};
+
+			myEChart.setOption(option);
+
+			myEChart.on('click', function(params) {
+				console.log(params);
+				console.log(params.name);
+			});
+
+			myEChart.on('legendselectchanged', function(params) {
+				console.log(params)
+			})
+			
+		})
+	</script>
+</body>
+</html>

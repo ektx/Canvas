@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>色温图</title>
+	<style>
+		body, div {
+			margin: 0;
+			padding: 0;
+		}
+		#main {
+			width: 100vw;
+			height: 90vh;
+		}
+	</style>
+</head>
+<body>
+	<!-- 图表生成点位区 -->
+	<div id="main"></div>
+
+	<!-- echarts图表 -->
+    <script src="../js/jquery-1.11.1.min.js"></script>
+    <script src="../js/echarts.min.js"></script>
+
+	<script>
+    var myEcharts = echarts.init(document.getElementById('main'));
+
+    $.get('mapjson/earth/world/china/zhejiang.json')
+    .done(function(data) {
+        
+        echarts.registerMap('zhejiang', data);
+
+    	option = {
+    	    tooltip: {
+    	        trigger: 'item',
+    	        formatter: '{b}'
+    	    },
+            visualMap: {
+                min: 0,
+                max: 1000,
+                text: ['高', '低'],
+                inRange: {
+                    color: ['lightskyblue', 'yellow', 'orangered']
+                }
+            },
+    	    series: [
+    	        {
+    	            name: 'zhejiang',
+    	            type: 'map',
+    	            mapType: 'zhejiang',
+    	            selectedMode : 'single',
+    	            label: {
+    	                normal: {
+    	                    show: true
+    	                },
+    	                emphasis: {
+    	                    show: true
+    	                }
+    	            },
+    	            data:[
+    	                {name:'杭州市', selected:true}
+    	            ]
+    	        }
+    	    ]
+    	};
+
+        myEcharts.setOption(option);
+        
+    })
+    .fail(function(err) {
+        console.log('没有找到地图信息!')
+    })
+	</script>
+
+</body>
+</html>

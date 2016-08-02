@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Map</title>
+	<link rel="stylesheet" href="../css/getMapJson.css" />
+	<style>
+		body, div {
+			margin: 0;
+			padding: 0;
+		}
+		#main {
+			width: 100vw;
+			height: 90vh;
+		}
+	</style>
+</head>
+<body>
+
+	<!-- 为 EChart -->
+	<div id="main" visible>
+	</div>
+	
+	<script src="../js/jquery-1.11.1.min.js"></script>
+	<script src="../js/echarts.min.js"></script>
+
+	<!-- 获取地图功能 -->
+	<script src="../js/getMapJson.js"></script>
+	
+	<script>
+
+
+
+	// getMapJson({
+	// 	mapPath: 'mapjson/',
+	// 	regName: 'world', 
+	// 	id:'main'
+	// })
+
+	// getMapJson({
+	// 	mapPath: 'mapjson/',
+	// 	regName: 'zhejiang', 
+	// 	id:'main'
+	// })
+
+
+	getMapJson({
+		mapPath: 'mapjson/',
+		regName: 'jiangxi', 
+		id:'main'
+	})
+
+
+	// getMapJson({
+	// 	mapPath: 'mapjson/',
+	// 	regName: 'china', 
+	// 	id:'main'
+	// })
+	</script>
+</body>
+</html>

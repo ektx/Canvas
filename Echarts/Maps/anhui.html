@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>China</title>
+</head>
+<body>
+
+	<!-- 为 EChart -->
+	<div id="main" style="width: 800px; height: 600px "></div>
+	
+	<script src="../jquery-1.11.1.min.js"></script>
+	<script src="../echartsAll.min.js"></script>
+	
+	<script>
+
+		$.get('../map/earth/china/anhui.json', function(mapJson) {
+			// 基于准备好的 dom, 初始化 echarts 实例
+			/*
+				echarts.registerMap( mapName, geoJson[, specialAreas])
+				---------------------------------------------------------
+				@mapName : string 注册数据为指定名称，方便调用在series mapType 中调用,
+				@geoJson : Object 使用的数据
+				@specialAreas: 可选。将地图中的部分区域缩放到合适的位置，可以使得整个地图的显示更加好看。
+
+			*/
+			echarts.registerMap('anhui', mapJson)
+
+			var myEChart = echarts.init(document.getElementById('main'));
+
+			// 指定图表的配置和数据
+			option = {
+				    tooltip: {
+				        trigger: 'item',
+				        formatter: '{b}'
+				    },
+				    series: [
+				        {
+				            name: '中国',
+				            type: 'map',
+				            mapType: 'anhui',
+				            selectedMode : 'multiple',
+				            label: {
+				                normal: {
+				                    show: true
+				                },
+				                emphasis: {
+				                    show: true
+				                }
+				            },
+				            data:[
+				                {name:'铜陵市', selected:true}
+				            ]
+				        }
+				    ]
+				};
+
+			myEChart.setOption(option)
+			
+		})
+	</script>
+</body>
+</html>
