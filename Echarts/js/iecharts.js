@@ -1,5 +1,5 @@
 /*
-	iEcharts v0.7.3
+	iEcharts v0.8.3
 
 
 	获取平均分布图片
@@ -1043,3 +1043,85 @@ function makePieCharts(id,options){
 
 	myEchart.setOption(dfop);
 };
+
+
+/*
+    getColorFigureMap 色温图
+    ----------------------------------------------
+    getColorFigureMap('main', {
+        // 定义地图名
+        mapName: 'zhejiang',
+        mapUrl: 'mapjson/earth/world/china/zhejiang.json',
+        // 色温条
+        visualMap: {
+            min: 0,
+            max: 1000,
+            text: ['高', '低'],
+            inRange: {
+                color: ['lightskyblue', 'yellow', 'orangered']
+            }
+        },
+        // 浮动提示
+        tooltip: {
+            trigger: 'item',
+            formatter: '{b}'
+        },
+        // 选择功能
+        selectedMode:'single',
+        // 数据
+        data:[
+            {name:'杭州市', value: 999, selected:true},
+            {name:'湖州市', value: 899},
+            {name:'嘉兴市', value: 799},
+            {name:'绍兴市', value: 899},
+            {name:'金华市', value: 599},
+            {name:'衢州市', value: 499},
+            {name:'丽水市', value: 399},
+            {name:'温州市', value: 699},
+            {name:'台州市', value: 399},
+            {name:'宁波市', value: 899},
+            {name:'舟山市', value: 199}
+        ]
+
+    });
+    ------------------------------------------------
+    2016/8/4                               
+*/
+function getColorFigureMap(id, option) {
+
+    var myEcharts = echarts.init(document.getElementById(id));
+
+    $.get(option.mapUrl)
+    .done(function(data) {
+        
+        echarts.registerMap(option.mapName, data);
+
+    	options = {
+            tooltip: option.tooltip,
+            visualMap: option.visualMap,
+    	    series: [
+                {
+                    name: option.mapName,
+                    type: 'map',
+                    mapType: option.mapName,
+                    selectedMode : option.selectedMode,
+                    label: {
+                        normal: {
+                            show: true
+                        },
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                    data: option.data
+                }
+            ]
+    	};
+
+        myEcharts.setOption(options);
+        
+    })
+    .fail(function(err) {
+        console.log('没有找到地图信息!')
+    })
+}

@@ -23,18 +23,14 @@
     <script src="../js/echarts.min.js"></script>
 
 	<script>
-    var myEcharts = echarts.init(document.getElementById('main'));
-
-    $.get('mapjson/earth/world/china/zhejiang.json')
-    .done(function(data) {
-        
-        echarts.registerMap('zhejiang', data);
-
-    	option = {
-    	    tooltip: {
-    	        trigger: 'item',
-    	        formatter: '{b}'
-    	    },
+    /*
+        getColorFigureMap 色温图
+        ----------------------------------------------
+        getColorFigureMap('main', {
+            // 定义地图名
+            mapName: 'zhejiang',
+            mapUrl: 'mapjson/earth/world/china/zhejiang.json',
+            // 色温条
             visualMap: {
                 min: 0,
                 max: 1000,
@@ -43,33 +39,107 @@
                     color: ['lightskyblue', 'yellow', 'orangered']
                 }
             },
-    	    series: [
-    	        {
-    	            name: 'zhejiang',
-    	            type: 'map',
-    	            mapType: 'zhejiang',
-    	            selectedMode : 'single',
-    	            label: {
-    	                normal: {
-    	                    show: true
-    	                },
-    	                emphasis: {
-    	                    show: true
-    	                }
-    	            },
-    	            data:[
-    	                {name:'杭州市', selected:true}
-    	            ]
-    	        }
-    	    ]
-    	};
+            // 浮动提示
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}'
+            },
+            // 选择功能
+            selectedMode:'single',
+            // 数据
+            data:[
+                {name:'杭州市', value: 999, selected:true},
+                {name:'湖州市', value: 899},
+                {name:'嘉兴市', value: 799},
+                {name:'绍兴市', value: 899},
+                {name:'金华市', value: 599},
+                {name:'衢州市', value: 499},
+                {name:'丽水市', value: 399},
+                {name:'温州市', value: 699},
+                {name:'台州市', value: 399},
+                {name:'宁波市', value: 899},
+                {name:'舟山市', value: 199}
+            ]
 
-        myEcharts.setOption(option);
-        
-    })
-    .fail(function(err) {
-        console.log('没有找到地图信息!')
-    })
+        });
+        ------------------------------------------------
+        2016/8/4                               
+    */
+    function getColorFigureMap(id, option) {
+
+        var myEcharts = echarts.init(document.getElementById(id));
+
+        $.get(option.mapUrl)
+        .done(function(data) {
+            
+            echarts.registerMap(option.mapName, data);
+
+        	options = {
+                tooltip: option.tooltip,
+                visualMap: option.visualMap,
+        	    series: [
+                    {
+                        name: option.mapName,
+                        type: 'map',
+                        mapType: option.mapName,
+                        selectedMode : option.selectedMode,
+                        label: {
+                            normal: {
+                                show: true
+                            },
+                            emphasis: {
+                                show: true
+                            }
+                        },
+                        data: option.data
+                    }
+                ]
+        	};
+
+            myEcharts.setOption(options);
+            
+        })
+        .fail(function(err) {
+            console.log('没有找到地图信息!')
+        })
+    }
+
+    getColorFigureMap('main', {
+        // 定义地图名
+        mapName: 'zhejiang',
+        mapUrl: 'mapjson/earth/world/china/zhejiang.json',
+        // 色温条
+        visualMap: {
+            min: 0,
+            max: 1000,
+            text: ['高', '低'],
+            inRange: {
+                color: ['lightskyblue', 'yellow', 'orangered']
+            }
+        },
+        // 浮动提示
+        tooltip: {
+            trigger: 'item',
+            formatter: '{b}'
+        },
+        // 选择功能
+        selectedMode:'single',
+        // 数据
+        data:[
+            {name:'杭州市', value: 999, selected:true},
+            {name:'湖州市', value: 899},
+            {name:'嘉兴市', value: 799},
+            {name:'绍兴市', value: 899},
+            {name:'金华市', value: 599},
+            {name:'衢州市', value: 499},
+            {name:'丽水市', value: 399},
+            {name:'温州市', value: 699},
+            {name:'台州市', value: 399},
+            {name:'宁波市', value: 899},
+            {name:'舟山市', value: 199}
+        ]
+
+    });
 	</script>
 
 </body>

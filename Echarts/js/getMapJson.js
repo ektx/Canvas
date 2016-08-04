@@ -248,7 +248,7 @@ function getMap(url, regName, id) {
 
 		
 	})
-	.error(function(err) {
+	.fail(function(err) {
 		myEChart.hideLoading();
 
 		console.log('没有找到您要的地图信息！')
