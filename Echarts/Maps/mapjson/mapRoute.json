@@ -3,5 +3,6 @@
 	"china": "earth/world/china.json",
 	"anhui": "earth/world/china/anhui.json",
 	"zhejiang": "earth/world/china/zhejiang.json",
-	"jiangxi": "earth/world/china/jiangxi.json"
+	"jiangxi": "earth/world/china/jiangxi.json",
+	"nancan": "earth/world/china/jiangxi/南昌市.geojson"
 }
