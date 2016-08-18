@@ -1,6 +1,15 @@
 /*
-	iEcharts v0.8.3
+	iEcharts v0.11.3
+*/
 
+function resizeCharts(charts) {
+	$(window).resize(function() {
+		charts.resize()
+	})
+}
+
+
+/*
 
 	获取平均分布图片
 	--------------------------------------------
@@ -656,9 +665,9 @@ function stackedColumnBar (id, options, version) {
 
 		makeLineCharts('company-charts', options, e3)
 */
-function makeLineCharts(id, options) {
+function makeLineCharts(id, options, version) {
 
-	myEchart = e3.init(document.getElementById(id));
+	myEchart = getVersionEC (id, version);;
 	options.legend.data = []
 
 	options.series.forEach(function(value) {
@@ -707,8 +716,8 @@ function makeLineCharts(id, options) {
 
 
 //仪表盘
-function makeGaugeCharts(id, options) {
-	myEchart = e3.init(document.getElementById(id));
+function makeGaugeCharts(id, options, version) {
+	myEchart = getVersionEC (id, version);;
 
 	var dfop = {
 		backgroundColor: '#1b1b1b',
@@ -993,8 +1002,8 @@ function makeGaugeCharts(id, options) {
 
 
 /*双饼图*/
-function makePieCharts(id,options){
-	myEchart = e3.init(document.getElementById(id));
+function makePieCharts(id, options, version){
+	myEchart = getVersionEC (id, version);
 
 	var dfop = {
 		tooltip: {
@@ -1048,26 +1057,32 @@ function makePieCharts(id,options){
 /*
     getColorFigureMap 色温图
     ----------------------------------------------
-    getColorFigureMap('main', {
-        // 定义地图名
-        mapName: 'zhejiang',
-        mapUrl: 'mapjson/earth/world/china/zhejiang.json',
-        // 色温条
-        visualMap: {
-            min: 0,
-            max: 1000,
-            text: ['高', '低'],
-            inRange: {
-                color: ['lightskyblue', 'yellow', 'orangered']
-            }
-        },
-        // 浮动提示
-        tooltip: {
-            trigger: 'item',
-            formatter: '{b}'
-        },
-        // 选择功能
-        selectedMode:'single',
+	getColorFigureMap('provincial-info-charts', {
+	    // 定义地图名
+	    mapName: 'zhejiang',
+	    mapUrl: 'contents/mapjson/earth/world/china/zhejiang.json',
+	    // 色温条
+	    visualMap: {
+	        min: 0,
+	        max: 100,
+	        inRange: {
+	            color: ['#1db4ff', '#fff']
+	        },
+	        itemWidth: 10,
+	        right: 0
+	    },
+	    // 浮动提示
+	    tooltip: {
+	        trigger: 'item',
+	        formatter: '{b}'
+	    },
+	    // 选择功能
+	    selectedMode: {
+	    	type: 'single',  // 选择功能
+	    	areaColor: '#f90', // 街区颜色
+	    	borderWidth: 5, // 边框大小
+	    	borderColor: '#fff' // 边框颜色
+	    },
         // 数据
         data:[
             {name:'杭州市', value: 999, selected:true},
@@ -1087,31 +1102,45 @@ function makePieCharts(id,options){
     ------------------------------------------------
     2016/8/4                               
 */
-function getColorFigureMap(id, option) {
+function getColorFigureMap(id, option, version) {
 
-    var myEcharts = echarts.init(document.getElementById(id));
+    var myEcharts = getVersionEC (id, version);
+    var position = option.position || [];
 
     $.get(option.mapUrl)
     .done(function(data) {
         
-        echarts.registerMap(option.mapName, data);
+        version.registerMap(option.mapName, data);
 
     	options = {
             tooltip: option.tooltip,
             visualMap: option.visualMap,
+            geo: option.geo,
+            layoutCenter: option.layout[0],
+            layoutSize: option.layout[1],
     	    series: [
                 {
                     name: option.mapName,
                     type: 'map',
                     mapType: option.mapName,
-                    selectedMode : option.selectedMode,
+                    selectedMode : option.selectedMode.type,
+                    top: position[0],
+                    right: position[1],
+                    bottom: position[2],
+                    right: position[3],
                     label: {
                         normal: {
-                            show: true
+                            show: true,
+                            textStyle: option.normal.textStyle
                         },
                         emphasis: {
-                            show: true
+                            show: true,
+                            textStyle: option.selectedMode.textStyle
                         }
+                    },
+                    itemStyle: {
+                    	normal: option.normal,
+                    	emphasis: option.selectedMode
                     },
                     data: option.data
                 }
@@ -1119,9 +1148,193 @@ function getColorFigureMap(id, option) {
     	};
 
         myEcharts.setOption(options);
+
+        // 添加随窗口变化自动调整
+        resizeCharts(myEcharts)
         
     })
     .fail(function(err) {
         console.log('没有找到地图信息!')
     })
+}
+
+
+
+/*
+	合并对象
+	-----------------------------------------
+	@obj 要输出的对象
+	@obj2 用来添加的对象
+*/
+function extendObj(obj, obj2) {
+
+	var findObj = function(_obj, _obj2) {
+
+		for (var key in _obj2) {
+
+			if (typeof _obj2[key] == 'object') {
+				if ( !_obj.hasOwnProperty(key) ) {
+
+					_obj[key] = _obj2[key]
+				} else {
+					// get 组合过的
+					_obj[key] = findObj(_obj[key], _obj2[key])
+				}
+				
+			}
+			else {
+				_obj[key] = _obj2[key]
+			}
+
+		}
+
+		return _obj
+	}
+
+
+	return findObj(obj, obj2)
+}
+
+
+/*
+	区域警告图
+	-----------------------------------------
+	option = {
+		id: 'echart',
+		title: {
+			text: '多组数据警告'
+		},
+		xAxis: {
+			name: 'ND',
+			nameLocation: 'start',
+		    data: [1,2,3,4,5,6]
+		},
+		yAxis: {
+			max: 2,
+			min: -2,
+			margin: 0.5,
+			warnColor: ['#f90', 'red']
+		},
+		barColor: ['#03adf5', '#690'],
+		series: [
+		    [1.2, -1, 1.2, 3.3, -3.3, -2.2],
+		    [1.4, -1.1, -1.2, 2.3, -0.3, -1.5]
+		]
+	};
+	areaWarning.init(option)
+	------------------------------------------
+	2016/8/9
+*/
+areaWarning = {
+	options: {
+		tooltip: {
+			formatter: function(params){
+				var result = '<p>';
+
+				// ico
+				result += '<i style="display:inline-block;width: 12px; height: 12px; border-radius: 100%; background:'+params.color+'; margin-right: 5px"></i>';
+
+				result += params.name;
+				result += '<span style="display:inline-block;width: 10px;"></span>';
+
+				if (typeof params.data === 'object') {
+					result += params.data.resetVal;
+				} else {
+					result += params.data  ;
+				}
+
+				// return params.name
+				return result +'</p>'
+			}
+		},
+	    xAxis: {
+	        silent: false,
+	        axisLine: {onZero: true},
+	        splitLine: {show: false},
+	        splitArea: {show: false}
+	    },
+	    yAxis: {
+	        splitArea: {show: false}
+	    }
+	},
+	init: function(option) {
+		var _series = [];
+		var topVal = option.yAxis.max + option.yAxis.margin;
+		var bottomVal = option.yAxis.min - option.yAxis.margin;
+
+
+		for (var i = 0, len = option.series.length; i < len; i++) {
+
+			// 循环数据,对超出数据进行特殊标识
+			for (var d = 0, dLen = option.series[i].length; d < dLen; d++) {
+				var _warnColor = '';
+				var _val = option.series[i][d];
+				var _needReset = 0;
+
+				// 对大于警告值的
+				if (_val > option.yAxis.max) {
+					_warnColor = option.yAxis.warnColor[0];
+					if (_val > topVal) _val = topVal;
+					_needReset = 1;
+				}
+				// 对小于警告值的 
+				else if ( _val < option.yAxis.min ) {
+					_needReset = 1;
+					if (_val < bottomVal) _val = bottomVal;
+					_warnColor = option.yAxis.warnColor[1];
+				};
+
+				// 对大于或小于警告值的数据格式化
+				if (_needReset) {
+					option.series[i].splice(d, 1, {
+						value: _val,
+						resetVal: option.series[i][d],
+						itemStyle: {
+							normal: {
+								color: _warnColor
+							},
+							emphasis: {
+								color: _warnColor
+							}
+						}
+					});
+				}
+			}
+
+			// 格式化数据
+			_series.push({
+				name: 'bar',
+				type: 'bar',
+				stack: 'one'+i,
+				itemStyle : {
+					normal: {
+						color: option.barColor[i]
+					},
+				    emphasis: {
+				        barBorderWidth: 1,
+				        shadowBlur: 10,
+				        shadowOffsetX: 0,
+				        shadowOffsetY: 0,
+				        shadowColor: 'rgba(0,0,0,0.5)'
+				    }
+				},
+				data: option.series[i]
+			})
+				
+		};
+
+
+		this.options.series = _series;
+		// 将 option 合并到 this.options 中
+		this.options = extendObj(this.options, option);
+		this.options.yAxis.max = topVal;
+		this.options.yAxis.min = bottomVal;
+		// 定义图表
+		// myEcharts = echarts.init(document.getElementById( option.id ) );
+		myEcharts = getVersionEC ( option.id , e3);
+		// 输出
+		myEcharts.setOption( this.options );
+
+		resizeCharts(myEcharts)
+	}
 }
