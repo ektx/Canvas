@@ -107,7 +107,7 @@ function getMap(url, regName, id) {
 			    ]
 			};
 
-			myEChart.setOption(option);
+			// myEChart.setOption(option);
 		})
 		.fail(function(err) {
 			console.log(err)
