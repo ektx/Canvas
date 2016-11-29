@@ -2,9 +2,19 @@
 	iEcharts v0.11.3
 */
 
+// echarts 自动大小调整
 function resizeCharts(charts) {
 	$(window).resize(function() {
 		charts.resize()
+	})
+
+	// 新加对窗口变化的监控
+	var _s;
+	$(document).on('click',function(){
+		clearTimeout(_s);
+		_s = setTimeout(function() {
+			charts.resize()
+		}, 300)
 	})
 }
 
