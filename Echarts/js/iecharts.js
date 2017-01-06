@@ -54,6 +54,7 @@ function resizeCharts(charts) {
         		return params.name
         	}
         },
+        precision: 5, // 保留5位小数
 		data: [
 				{
 					name:'舟山',
@@ -72,7 +73,7 @@ function resizeCharts(charts) {
 
 	getAverageChart('echart', option);
 	--------------------------------------------
-	zwl <530675800@qq.com>             2016.7.14
+	zwl <530675800@qq.com>             2017.1.6
 */
 	function getAverageChart(id, options, version) {
 		
@@ -162,6 +163,7 @@ function resizeCharts(charts) {
 		                        type: 'solid',
 		                    }
 		                },
+		                precision: options.precision || 2,
 		                data : [
 		                    {
 		                    	yAxis: options.y.value,
