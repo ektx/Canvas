@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Rainy</title>
+	<style>
+		body, canvas {
+			margin: 0;
+			padding: 0;
+		}
+		body {
+			background-color: #000;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="rain-box"></canvas>
+
+	<script>
+		"use strict";
+
+		let options = {
+			ele: '#rain-box',
+			amount: 500,
+			speed: .1,
+			lifetime: 50,
+			direction: {
+				x: -0.5,
+				y: 1
+			},
+			size: [1,1],
+			maxopacity: 1,
+			color: '150, 150, 150',
+			randColor: true,
+			acceleration: [5, 40]
+		};
+
+		if (window.innerWidth < 520) {
+			options.speed = 0.05;
+		}
+
+		(function spark() {
+			let canvas = document.querySelector(options.ele);
+			let ctx = canvas.getContext('2d');
+			let sparks = [];
+
+			window.addEventListener('resize', ()=> {
+				setCanvasWidth()
+			});
+
+			function setCanvasWidth() {
+				ctx.canvas.width = window.innerWidth;
+				ctx.canvas.height = window.innerHeight;
+			}
+
+			function rand(min, max) {
+				return Math.floor(Math.random() * (max - min +1)) + min;
+			}
+
+			function init() {
+				setCanvasWidth();
+
+				window.setInterval(()=>{
+					if (sparks.length < options.amount) {
+						addSpark()
+					}
+				}, 1000/ options.amount);
+
+				window.requestAnimationFrame(draw);
+			}
+
+			function draw() {
+				ctx.fillStyle = 'rgba(0, 0, 0, .1)';
+				ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+				sparks.forEach((spark, i, array)=>{
+					if (spark.opacity <= 0) {
+						array.splice(i, 1)
+					} else {
+						drawSpark(spark)
+					}
+				});
+
+				window.requestAnimationFrame(draw)
+			}
+
+			function Spark(x, y) {
+				this.x = x;
+				this.y = y;
+				this.age = 0;
+				this.acceleration = rand(options.acceleration[0], options.acceleration[1]);
+				this.color = options.randColor ? `${rand(0, 255)},${rand(0, 255)},${rand(0, 255)}` : options.color;
+				this.opacity = options.maxopacity - this.age / (options.lifetime * rand(1, 10));
+				this.go = ()=>{
+					this.x += options.speed * options.direction.x * this.acceleration / 2;
+					this.y += options.speed * options.direction.y * this.acceleration / 2;
+					this.opacity = options.maxopacity - ++this.age / options.lifetime;
+				} 
+			}
+
+			function addSpark() {
+				let x = rand(-200, window.innerWidth + 200);
+				let y = rand(-200, window.innerHeight + 200);
+				sparks.push(new Spark(x, y))
+			}
+
+			function drawSpark(spark) {
+				let x = spark.x,
+					y = spark.y;
+
+				spark.go();
+
+				ctx.beginPath();
+				ctx.fillStyle = `rgba(${spark.color}, ${spark.opacity})`;
+				ctx.rect(x, y, options.size[0], options.size[1], 0, 0, Math.PI * 2);
+				ctx.fill();
+			}
+
+			init();
+		})();
+	</script>
+</body>
+</html>
