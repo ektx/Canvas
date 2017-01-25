@@ -4,9 +4,9 @@
 <head>
 	<meta charset="utf-8">		
 	<title>飞舞的文字</title>
-	<!-- <script type="text/javascript" src="/~zwl/lib/jquery-2.1.1.min.js"></script> -->
-	<!-- <script type="text/javascript" src="/~zwl/lib/jquery-ui.min.js"></script> -->
-	<!-- <script type="text/javascript" src="/~zwl/lib/modernizr.2.8.3.js"></script> -->
+	<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="jquery-ui.min.js"></script>
+	<script type="text/javascript" src="modernizr.custom.61500.js"></script>
 	<style type="text/css">
 	body {
 		background-color: #fff;
@@ -71,12 +71,13 @@ function windowLoadHandler() {
 	canvasApp();
 }
 
-// function canvasSupport() {
-// 	return Modernizr.canvas;
-// }
+function canvasSupport() {
+	return !!document.createElement('canvas').getContext;
+	// return Modernizr.canvas;
+}
 
 function canvasApp() {
-	if (!window.canvasSupport) {
+	if (!canvasSupport()) {
 		return;
 	}
 
@@ -396,41 +397,41 @@ function canvasApp() {
 }
 
 
-// $(function() {
-// 	$('#slider-range').slider({
-// 		range: false,
-// 		min: 20,
-// 		max: 1000,
-// 		value: 280,
-// 		slide: function(event, ui) {
-// 			console.log('大小：'+ui.value);
-// 			sphereRad = ui.value;
-// 		}
-// 	});
+$(function() {
+	$('#slider-range').slider({
+		range: false,
+		min: 20,
+		max: 1000,
+		value: 280,
+		slide: function(event, ui) {
+			console.log('大小：'+ui.value);
+			sphereRad = ui.value;
+		}
+	});
  
-// 	$('#slider-test').slider({
-// 		range: false,
-// 		min:1.0,
-// 		max: 2.0,
-// 		value: 1,
-// 		step: 0.01,
-// 		slide: function(event, ui) {
-// 			console.log('透视'+ui.value);
-// 			radius_sp = ui.value;
-// 		}
-// 	})
+	$('#slider-test').slider({
+		range: false,
+		min:1.0,
+		max: 2.0,
+		value: 1,
+		step: 0.01,
+		slide: function(event, ui) {
+			console.log('透视'+ui.value);
+			radius_sp = ui.value;
+		}
+	})
  
-// 	$('#slider-speed').slider({
-// 		range: false,
-// 		min:100,
-// 		max: 4000,
-// 		value: 1200,
-// 		step: 10,
-// 		slide: function(event, ui) {
-// 			console.log('speed'+ui.value);
-// 			Speed_v = ui.value;
-// 		}
-// 	})
-// });
+	$('#slider-speed').slider({
+		range: false,
+		min:100,
+		max: 4000,
+		value: 1200,
+		step: 10,
+		slide: function(event, ui) {
+			console.log('speed'+ui.value);
+			Speed_v = ui.value;
+		}
+	})
+});
 </script>
 </html>
