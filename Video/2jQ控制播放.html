@@ -3,30 +3,27 @@
 <head>
 	<meta charset="utf-8">
 	<title>控制播放</title>
-	<script type="text/javascript" src="../js/jquery-2.0.3.min.js"></script>
-	<script type="text/javascript">
-	$(document).ready(function() {
-		var video = $('#myVideo');
-
-		$('#play').click(function() {
-			video.get(0).play();
-		});
-
-		$('#pause').click(function() {
-			video.get(0).pause();
-		});
-	})
-	</script>
-
 </head>
 <body>
 	<!-- controls 显示控制条 -->
 	<video id="myVideo" width="848" height="480">
 		<source src="iPadAir.mp4" type="video/mp4">
 	</video>
-	<div>
+	<div id="btn-box">
 		<button id="play">Play</button>
 		<button id="pause">pause</button>
 	</div>
+
+	<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', function() {
+		var video = document.getElementById('myVideo');
+
+		document.getElementById('btn-box').addEventListener('click', function(e) {
+			// video.play() or video.pause()
+			video[e.target.id]();
+		}, false)
+
+	}, false)
+	</script>
 </body>
 </html>
