@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+	<canvas width="400" height="400"></canvas>
+
+	<script>
+		let canvas = document.querySelector('canvas');
+		let ctx = canvas.getContext('2d');
+		let _devicePixelRatio = getDevPixelRatio();
+
+		if (_devicePixelRatio > 1) {
+			canvas.width = canvas.width * _devicePixelRatio;
+			canvas.height = canvas.height * _devicePixelRatio;
+		}
+
+		ctx.fillStyle = '#c30';
+		ctx.beginPath();
+		ctx.arc(100 * _devicePixelRatio, 100 * _devicePixelRatio, 50 * _devicePixelRatio, 0, Math.PI*2, false);
+		ctx.closePath();
+		ctx.fill();
+
+
+		// 获取视网膜屏的设备像素比
+		function getDevPixelRatio() {
+			if ('devicePixelRatio' in window) {
+				if (window.devicePixelRatio > 1) {
+					return window.devicePixelRatio;
+				}
+			}
+			return 1;
+		}
+	</script>
+</body>
+</html>
