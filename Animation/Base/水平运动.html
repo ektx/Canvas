@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas</title>
+	<style type="text/css">
+		body {
+			background-color: #333;
+		}
+		canvas {
+			width: 200px;
+			height: 200px;
+		}
+	</style>
+</head>
+<body>
+
+	<canvas width="400" height="400" id="test"></canvas>
+
+
+<script type="text/javascript">
+let canvas = document.getElementById('test');
+let ctx = canvas.getContext('2d');
+let canW = canvas.width;
+let canH = canvas.height;
+
+let arcPosition = [];
+
+function Arc(x,y, r) {
+	this.x = x;
+	this.y = y;
+	this.r = r || 50;
+}
+
+Arc.prototype = {
+	update: function() {
+		this.x = this.x++ > 300 ? 100 : this.x;
+	},
+
+	draw: function() {
+		ctx.clearRect(0, 0, canW, canH);
+
+		ctx.fillStyle = '#ff0';
+		ctx.beginPath();
+		ctx.arc(this.x, this.y, this.r, 0, Math.PI*2, false);
+		ctx.closePath();
+		ctx.fill();
+
+	}
+}
+
+
+
+let noeArc = new Arc(100, 100);
+
+function init() {
+	noeArc.draw();
+
+	requestAnimationFrame(animate)
+}
+
+function animate() {
+	noeArc.update();
+	noeArc.draw();
+
+	requestAnimationFrame(animate)
+}
+
+init()
+</script>
+</body>
+</html>
