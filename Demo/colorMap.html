@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Color Map</title>
+</head>
+<body>
+	<canvas id="my-canvas" width="600" height="200"></canvas>
+	<br>
+	<input type="text" id="startColor" value="#ff9900">
+	<input type="text" id="endColor" value="rgba(255,255,0,255)">
+	<button id="go">Go</button>
+	
+	<br>
+	<input type="number" id="val" max="100" min="0">
+	<button id="get">Get Color</button>
+
+	<script>
+	let canvas = document.getElementById('my-canvas');
+	let ctx = canvas.getContext('2d');
+
+	let sColor = document.getElementById('startColor').value;
+	let eColor = document.getElementById('endColor').value;
+
+	let gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+	gradient.addColorStop(0, sColor);
+	gradient.addColorStop(1, eColor);
+
+	ctx.fillStyle = gradient;
+	ctx.fillRect(0, 0, canvas.width, 50);
+
+	document.getElementById('get').addEventListener('click', function () {
+		let val = document.getElementById('val').value;
+		let per = val/100;
+
+		let getColorArr = function( color ) {
+			if (color.startsWith('#')) {
+
+			} else {
+				
+			}
+		}
+
+		let sColorArr = getColorArr( sColor );
+		let eColorArr = getColorArr( eColor );
+
+	}, false)
+
+	</script>
+</body>
+</html>
