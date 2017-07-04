@@ -85,11 +85,15 @@ class WaterBall {
 		})
 
 		this.ctx.beginPath();
-		this.ctx.moveTo(0, 150);
+		this.ctx.moveTo(0, 300);
+		this.ctx.lineTo(0, 150);
 		this.ctx.bezierCurveTo(0, 150, 200, 190, 300, 150);
+		this.ctx.lineTo(300, 150);
+		this.ctx.lineTo(300, 300);
+
 		this.ctx.stroke();
 		this.ctx.fill();
-		
+
 
 	}
 }
