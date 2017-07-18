@@ -27,5 +27,19 @@
 
 	// ctx.arcTo(0, 50, 50, 0, 50);
 	// ctx.closePath();
+
+	let canvas1 = document.createElement('canvas');
+		canvas1.width = 500;
+		canvas1.height = 400;
+		
+		let ctx1 = canvas1.getContext('2d');
+
+		ctx1.fillStyle = "#ff0";
+		ctx1.beginPath();
+		ctx1.arc(100, 100, 50, 0, Math.PI*2, false);
+		ctx1.closePath();
+	ctx1.fill();
+document.body.appendChild( canvas1 )
+
 </script>
 </html>
