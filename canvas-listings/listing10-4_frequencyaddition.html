@@ -72,14 +72,15 @@ function animate() {
 
 
 function drawSinWave (index) {
+	// debugger
 	var thisCtx = ctx[index];
 	// clear to black
 	thisCtx.fillRect(0,0,canvasWidth,cHeight);
 	// draw X axis
  	var xAxis = cHeight / 2;
 	thisCtx.beginPath();
- 	thisCtx.moveTo(canvasWidth,xAxis);
- 	thisCtx.lineTo(0,xAxis);
+ 	// thisCtx.moveTo(canvasWidth,xAxis);
+ 	// thisCtx.lineTo(0,xAxis);
 	// plot graph of sine wave
  	var xCoord=0;
  	var steps=canvasWidth / freq[index];
