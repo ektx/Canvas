@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+</head>
+
+<body>
+<canvas id="my-canvas" width="150" height="150"></canvas>
+<script type="text/javascript">
+	var canvas = document.getElementById('my-canvas');
+	var context = canvas.getContext('2d');
+	   
+	context.rect(10,10,100,100);
+	
+	let savePath = context;
+
+	if (savePath.isPointInPath(20, 20)) {
+
+		context.fill();
+	}
+
+</script>
+
+</body>
+</html>

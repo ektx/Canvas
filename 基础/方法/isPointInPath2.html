@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+</head>
+
+<body>
+<canvas id="my-canvas" width="450" height="450"></canvas>
+<script type="text/javascript">
+	let canvas = document.getElementById('my-canvas');
+	let ctx = canvas.getContext('2d');
+
+	let a = b = '';
+	
+	function isPointInPath(x,y) {
+
+		ctx.clearRect(0,0, 450, 450)
+
+		ctx.save();
+		ctx.fillStyle = 'blue';
+		ctx.beginPath();
+		ctx.arc(50, 50, 50, 0, 2 * Math.PI, false);
+		a = ctx;
+		if (ctx.isPointInPath(x, y)) {
+			
+			ctx.fill();
+		}	
+		ctx.stroke();
+		ctx.restore()
+
+		ctx.save();
+		ctx.fillStyle = 'red';
+		ctx.beginPath();
+		ctx.arc(100, 100, 50, 0, 2 * Math.PI, false);
+		b = ctx;
+		if (ctx.isPointInPath(x, y)) {
+			
+			ctx.fill();
+		}	
+		ctx.stroke();
+		ctx.restore()
+	}
+
+
+</script>
+
+</body>
+</html>
