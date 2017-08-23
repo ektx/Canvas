@@ -13,10 +13,19 @@
 	   
 	context.rect(10,10,100,100);
 	
+	context.moveTo(120,120)
+	context.lineTo(120,125);
+	context.lineTo(125,125);
+	context.lineTo(125,120);
+
+	context.moveTo(80, 120)
+	context.lineTo(90, 120);
+	context.lineTo(90, 130);
+	context.lineTo(80, 130);
+	
 	let savePath = context;
 
-	if (savePath.isPointInPath(20, 20)) {
-
+	if (savePath.isPointInPath(12, 12)) {
 		context.fill();
 	}
 
