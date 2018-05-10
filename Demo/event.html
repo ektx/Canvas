@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas events</title>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <script>
+    // https://blog.lavrton.com/hit-region-detection-for-html5-canvas-and-how-to-listen-to-click-events-on-canvas-shapes-815034d7e9f8
+    const canvas = document.getElementById('canvas')
+    const ctx = canvas.getContext('2d')
+
+    const hitCanvas = document.createElement('canvas')
+    const hitCtx = hitCanvas.getContext('2d')
+
+    const colorsHash = {}
+
+    function getRandomColor() {
+        const r = Math.round(Math.random() * 255)
+        const g = Math.round(Math.random() * 255)
+        const b = Math.round(Math.random() * 255)
+        return `rgb(${r},${g},${b})`
+    }
+
+    function hasSameColor(color, shape) {
+        return shape.color === color
+    }
+
+    function mouseEvt (evt) {
+        const mousePos = {
+            x: evt.clientX - canvas.offsetLeft,
+            y: evt.clientY - canvas.offsetTop
+        }
+
+        const pixel = hitCtx.getImageData(mousePos.x, mousePos.y, 1, 1).data
+        const color = `rgb(${pixel[0]},${pixel[1]},${pixel[2]})`
+        const shape = colorsHash[color]
+        if (shape) {
+            console.log(shape)
+        }
+    }
+
+    // create circles to draw
+    const circles = [
+        {
+            x: 50,
+            y: 50,
+            radius: 15,
+            color: 'rgb(255,0,0)'
+        },
+        {
+            x: 70,
+            y: 70,
+            radius: 20,
+            color: 'rgba(0,255,0, .5)'
+        }
+    ]
+
+    // draw circles
+    circles.forEach(circle => {
+        while(true) {
+            const colorKey = getRandomColor()
+
+            if (!colorsHash[colorKey]) {
+                circle.colorKey = colorKey
+                colorsHash[colorKey] = circle
+                return
+            }
+        }
+
+    })
+    
+    circles.forEach(circle => {
+        ctx.beginPath()
+        ctx.arc(circle.x, circle.y, circle.radius, 0, 2 * Math.PI, false)
+        ctx.fillStyle = circle.color
+        ctx.fill()
+        
+        hitCtx.beginPath()
+        hitCtx.arc(circle.x, circle.y, circle.radius, 0, 2 * Math.PI, false)
+        hitCtx.fillStyle = circle.colorKey
+        hitCtx.fill()
+
+    })
+
+    document.body.appendChild(hitCanvas)
+
+    canvas.addEventListener('click', mouseEvt)
+    canvas.addEventListener('mousemove', mouseEvt)
+    </script>
+</body>
+</html>
