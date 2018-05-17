@@ -24,6 +24,12 @@
 		<br>
 		<canvas id="canvas3" height="300" width="300px"></canvas>
 	</fieldest>
+	
+	<fieldest>
+		<legend>角度渐变</legend>
+		<br>
+		<canvas id="canvas4" height="300" width="300px"></canvas>
+	</fieldest>
 
 	<script>
 	var canvas = document.getElementById('canvas');
@@ -37,9 +43,6 @@
 	context.fillStyle = gradient;
 	context.fillRect(0, 0, canvas.width, canvas.height);
 
-	</script>
-
-	<script>
 	var canvas = document.getElementById('canvas2');
 	var context = canvas.getContext('2d');
 
@@ -51,9 +54,6 @@
 	context.fillStyle = gradient;
 	context.fillRect(0, 0, canvas.width, canvas.height);
 
-	</script>
-	
-	<script>
 	var canvas = document.getElementById('canvas3');
 	var context = canvas.getContext('2d');
 
@@ -67,7 +67,217 @@
 
 	context.fillStyle = gradient;
 	context.fillRect(0, 0, canvas.width, canvas.height);
+	
+	// 4
+	class Point {
+		constructor (x = 0, y = 0) {
+			this.x = x
+			this.y = y
+		}
 
+		add (other) {
+			return this._operationTemplate(other, (a, b) => a + b)
+		}
+		sub (other) {
+			return this._operationTemplate(other, (a, b) => a - b)
+		}
+		mul (other) {
+			return this._operationTemplate(other, (a, b) => a * b)
+		}
+		div (other) {
+			return this._operationTemplate(other, (a, b) => a / b)
+		}
+		ceil () {
+			return this._operationTemplate(null, a => Math.ceil(a))
+		}
+		floor () {
+			return this._operationTemplate(null, a => Math.floor(a))
+		}
+		round () {
+			return this._operationTemplate(null, a => Math.round(a))
+		}
+		_operationTemplate (other, op) {
+			if (isNumber(other)) {
+				return new Point(op(this.x, other), op(this.y, other))
+			}
+
+			if (other == null) {
+				return new Point(op(this.x), op(this.y))
+			}
+
+			return new Point(op(this.x, other.x), op(this.y, other.y))
+		}
+		toDist () {
+			return Math.sqrt(this.toDistSquared())
+		}
+		toDistSquared () {
+			return this.x * this.x + this.y * this.y
+		}
+		normalize () {
+			return this.div(this.toDist())
+		}
+		invert () {
+			return new Point(-this.x, -this.y)
+		}
+		closest (points) {
+			return this._findTemplate(
+				points,
+				() => Number.MAX_VALUE,
+				(dist, recordDist) => dist < recordDist
+			)
+		}
+		farthest (points) {
+			return this._findTemplate(
+				points,
+				() => 0,
+				(dist, recordDist) => dist > recordDist
+			)
+		}
+		_findTemplate (points, init, compare) {
+			let record = init()
+			let recordPoint = points[0]
+
+			for (let i = 1; i < points.length; i++) {
+				let point = points[i]
+				let dist = this.sub(point).toDist()
+
+				if (compare(dist, record)) {
+					record = dist
+					recordPoint = point
+				}
+			}
+			return recordPoint
+		}
+	}
+
+	function isNumber(n) {
+		// isFinite() 函数用于检查其参数是否是无穷大。
+		return !isNaN(parseFloat(n)) && isFinite(n)
+	}
+
+class Circle {
+	constructor (location, radius) {
+		this.init(location, radius)
+	}
+
+	init (location, radius) {
+        this.location = location? new Point(location[0], location[1]): new Point()
+        this.radius = radius? radius: 1
+    }
+    contains (p) {
+        return p.sub(this.location).toDist() <= this.radius;
+    }
+    intersect (p1, p2) {
+        // http://local.wasp.uwa.edu.au/~pbourke/geometry/sphereline/
+        let dp = p2.sub(p1);
+        let a = dp.toDistSquared();
+        let b = 2 * (dp.x * (p1.x - this.location.x) +
+            dp.y * (p1.y - this.location.y));
+        let c = this.location.toDistSquared() + p1.toDistSquared() - 2 *
+            (this.location.x * p1.x + this.location.y * p1.y) -
+            this.radius * this.radius;
+
+        let bb4ac = b * b - 4 * a * c;
+
+        let epsilon = 0.0001;
+        if (Math.abs(a) < epsilon || bb4ac < 0) {
+            return [];
+        }
+
+        if (bb4ac == 0) {
+            return [p2.sub(p1).mul(-b / (2 * a)).add(p1)];
+        }
+
+        let mu1 = (-b + Math.sqrt(bb4ac)) / (2 * a);
+        let mu2 = (-b - Math.sqrt(bb4ac)) / (2 * a);
+
+        return [p2.sub(p1).mul(mu1).add(p1), p2.sub(p1).mul(mu2).add(p1)]
+    }
+}
+
+function lerp(a, b, fac) {
+    var ret = [];
+
+    if(a == b) {
+        return a;
+    }
+
+    for (var i = 0; i < Math.min(a.length, b.length); i++) {
+        ret[i] = a[i] * (1 - fac) + b[i] * fac;
+    }
+
+    return ret;
+}
+
+function project(target, initial, current) {
+    var delta = initial.sub(target);
+
+    if( (delta.x == 0) && (delta.y == 0) ) {
+        return target;
+    }
+
+    var t = current.sub(target).mul(delta).div(delta.toDistSquared());
+
+    return delta.mul(t.x + t.y).add(target);
+}
+
+function dot(a, b) {
+    return a.x * b.x + a.y * b.y;
+}
+
+function process(canvas, func) {
+    function setPixel(imageData, x, y, rgba) {
+        var index = (x + y * imageData.width) * 4;
+
+        for (var i = 0; i < 4; i++) {
+            imageData.data[index + i] = rgba[i] * 255;
+        }
+    }
+
+    var ctx = canvas.getContext("2d");
+    var imageData = ctx.createImageData(canvas.width,
+        canvas.height);
+
+    for (var y = 0; y < canvas.height; y++) {
+        for (var x = 0; x < canvas.width; x++) {
+            var result = func(new Point(x, y));
+
+            setPixel(imageData, x, y, result);
+        }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+}
+
+let canvas4 = document.querySelector('#canvas4')
+var halfWidth = canvas4.width / 2;
+var halfHeight = canvas4.height / 2;
+var gradientCenter = new Point(halfWidth, halfHeight);
+var colors = [ [1, 0, 0, 1], // red
+	[0, 1, 0, 1], // green
+	[0, 0, 1, 1] // blue
+];
+var angularGradient = function(point) {
+	// figure out angle
+	var dir = point.sub(gradientCenter);
+	var angle = Math.atan2(dir.y, dir.x);
+	// wrap around as positive
+	if (dir.y < 0 ) {
+		angle += 2 * Math.PI;
+	}
+	// map to [0, 1] range
+	angle /= (2 * Math.PI);
+	// figure out which segments to interpolate
+	var angleRatio = angle * colors.length;
+	var index = Math.floor(angleRatio);
+	var leftColor = index == 0? colors[colors.length - 1]:
+		colors[index - 1];
+	var rightColor = colors[index];
+	// figure out interpolation factor
+	var lerpFac = angleRatio % 1;
+	return lerp(leftColor, rightColor, lerpFac);
+}
+process(canvas4, angularGradient);
 	</script>
 </body>
 </html>

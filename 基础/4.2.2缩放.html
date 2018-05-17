@@ -32,7 +32,7 @@ context.strokeStyle = "rgb(180,0,30)";
 context.save();
 
 // 如果我们希望缩放之后，开始位置还是（10，10）的话
-context.translate(-10,-10);
+context.translate(0,0);
 
 // 缩放，参数为长与高的缩放倍数,缩放的内容为它之后设定的所有内容，包括平移
 context.scale(2,2);
@@ -42,9 +42,9 @@ context.strokeRect(10,10,100,100);
 context.fillRect(10, 10, 100, 100);
 
 // 恢复状态可以让画布还原，同时还原的还有平移
-context.restore();
-context.strokeRect(10,10,100,100);
-context.fillRect(10, 10, 100, 100);
+// context.restore();
+// context.strokeRect(10,10,100,100);
+// context.fillRect(10, 10, 100, 100);
 </script>
 
 </html>
