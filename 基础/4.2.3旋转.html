@@ -1,45 +1,46 @@
 <!doctype html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<title>保存与恢复</title>
+	<meta charset="utf-8">
+	<title>保存与恢复</title>
 </head>
 
 <body>
-<p id="support"></p>
-<canvas id="diagonal" style="border:1px solid #00F;" height="400" width="400"></canvas>
+	<p id="support"></p>
+	<canvas id="diagonal" style="border:1px solid #00F;" height="400" width="400"></canvas>
 </body>
 <script type="text/javascript">
-//检测浏览器对canvas的支持情况
-try {
-	document.createElement("canvas").getContext("2d");
-	document.getElementById("support").innerHTML = 
-		"HTML5 Canvas is supported in your browser.";	
-} catch (e) {
-	document.getElementById("support").innerHTML =
-		"HTML5 Canvas is not supported in your brower.";
-}
+	//检测浏览器对canvas的支持情况
+	try {
+		document.createElement("canvas").getContext("2d");
+		document.getElementById("support").innerHTML =
+			"HTML5 Canvas is supported in your browser.";
+	} catch (e) {
+		document.getElementById("support").innerHTML =
+			"HTML5 Canvas is not supported in your brower.";
+	}
 
-var canvas = document.getElementById('diagonal');
-var context = canvas.getContext('2d');
+	let canvas = document.getElementById('diagonal');
+	let context = canvas.getContext('2d');
 
-context.fillStyle = "rgb(255,0,0)";
-// 边框为3px
-context.lineWidth = 3;
-// 边框色为深红
-context.strokeStyle = "rgb(180,0,30)";
-// 保存直充内容为红色绿色边框的状态
-context.save();
+	context.fillStyle = "rgb(255,0,0)";
+	// 边框为3px
+	context.lineWidth = 3;
+	// 边框色为深红
+	context.strokeStyle = "rgb(180,0,30)";
+	// 保存直充内容为红色绿色边框的状态
+	context.save();
 
-// 如果我们希望缩放之后，开始位置还是（10，10）的话
-context.translate(100,0);
+	// 移动画布到可视范围
+	context.translate(100, 0);
 
-// 旋转45度,为(math.pi/4)
-context.rotate(0.7854);
+	// 旋转45度
+	context.rotate(Math.PI / 4);
 
-// 路径与大小
-context.strokeRect(10,10,100,100);
-context.fillRect(10, 10, 100, 100);
+	// 路径与大小
+	context.strokeRect(10, 10, 100, 100);
+	context.fillRect(10, 10, 100, 100);
 </script>
 
 </html>
