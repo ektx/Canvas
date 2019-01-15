@@ -6,215 +6,81 @@
 </head>
 <body>
 	<h3>Canvas globalCompositeOperation(Canvas图像合成)</h3>
-	<!-- 1 -->
-	<div>
-		<p>source-over 顶层</p>
-		<canvas id="canvas" height="300" width="300px"></canvas>
-	</div>
-
-	<!-- 2 -->
-	<div>
-		<p>destination-over 低层</p>
-		<canvas id="canvas1" height="300" width="300px"></canvas>
-	</div>
-	
-	<!-- 3 -->
-	<div>
-		<p>source-atop 源之上 只能出现在源之内的显示</p>
-		<canvas id="canvas2" height="300" width="300px"></canvas>
-	</div>
-
-	<!-- 4 -->
-	<div>
-		<p>destination-atop 目标上 只能在目标上显示，其它的内容都不可见</p>
-		<canvas id="canvas3" height="300" width="300px"></canvas>
-	</div>
-	
-	<!-- 5 -->
-	<div>
-		<p>source-in 相交 只有相交的部分可见，且以后者相交的内容可见</p>
-		<canvas id="canvas4" height="300" width="300px"></canvas>
-	</div>
-
-	<!-- 6 -->
-	<div>
-		<p>destination-in 相交 只有相交的部分可见，但是前者相交的内容可见</p>
-		<canvas id="canvas5" height="300" width="300px"></canvas>
-	</div>
-
-	<!-- 7 -->
-	<div>
-		<p>source-out 剪切后 剪切后添加的元素内容，前内容不可见</p>
-		<canvas id="canvas6" height="300" width="300px"></canvas>
-	</div>
-
-	<!-- 8 -->
-	<div>
-		<p>destination-out 剪切前 剪切前添加的元素内容，后添加内容不可见</p>
-		<canvas id="canvas7" height="300" width="300px"></canvas>
-	</div>
-
-	<!-- 9 -->
-	<div>
-		<p>lighter 剪去 剪去相交内容</p>
-		<canvas id="canvas8" height="300" width="300px"></canvas>
-	</div>
-
-	<!-- 10 -->
-	<div>
-		<p>copy 复制 传说只绘制源，覆盖掉目标，无法看见变化=W=</p>
-		<canvas id="canvas9" height="300" width="300px"></canvas>
-	</div>
-
-	<!-- 11 -->
-	<div>
-		<p>xor 异或 只绘制没有重叠的部分</p>
-		<canvas id="canvas10" height="300" width="300px"></canvas>
-	</div>
 
 	<!-- 1 -->
 	<script>
-	// source-over
-	var canvas = document.getElementById('canvas');
-	var context = canvas.getContext('2d');
+	let GCOList = [
+		{
+			label: 'source-over 顶层',
+			key: 'source-over'
+		},
+		{
+			label: 'destination-over 低层',
+			key: 'destination-over'
+		},
+		{
+			label: 'source-atop 源之上 只能出现在源之内的显示',
+			key: 'source-atop'
+		},
+		{
+			label: 'destination-atop 目标上 只能在目标上显示，其它的内容都不可见',
+			key: 'destination-atop'
+		},
+		{
+			label: 'source-in 相交 只有相交的部分可见，且以后者相交的内容可见',
+			key: 'source-in'
+		},
+		{
+			label: 'destination-in 相交 只有相交的部分可见，但是前者相交的内容可见',
+			key: 'destination-in'
+		},
+		{
+			label: 'source-out 剪切后 剪切后添加的元素内容，前内容不可见',
+			key: 'source-out'
+		},
+		{
+			label: 'destination-out 剪切前 剪切前添加的元素内容，后添加内容不可见',
+			key: 'destination-out'
+		},
+		{
+			label: 'lighter 剪去 剪去相交内容',
+			key: 'lighter'
+		},
+		{
+			label: 'copy 复制 传说只绘制源，覆盖掉目标，无法看见变化=W=',
+			key: 'copy'
+		},
+		{
+			label: 'xor 异或 只绘制没有重叠的部分',
+			key: 'xor'
+		},
+	]
 
-	context.fillStyle = 'rgb(63, 169, 245)';
-	context.fillRect(50, 50, 100, 100);
-	context.globalCompositeOperation = "source-over";
-	context.fillStyle = 'rgb(255, 123, 172)';
-	context.fillRect(100,100,100,100);
-	</script>
+	GCOList.forEach(item => {
+		let box = document.createElement('div')
 
-	<!-- 2 -->
-	<script>
-	// destination-over
-	var canvas1 = document.getElementById('canvas1');
-	var context = canvas1.getContext('2d');
+		// text
+		let text = document.createElement('p')
+		text.innerText = item.label
+		box.appendChild(text)
 
-	context.fillStyle = 'rgb(63, 169, 245)';
-	context.fillRect(50, 50, 100, 100);
-	context.globalCompositeOperation = "destination-over";
-	context.fillStyle = 'rgb(255, 123, 172)';
-	context.fillRect(100,100,100,100);
-	</script>
+		// canvas
+		let canvas = document.createElement('canvas')
+		let context = canvas.getContext('2d')
 
-	<!-- 3 -->
-	<script>
-	// source-atop
-	var canvas2 = document.getElementById('canvas2');
-	var context = canvas2.getContext('2d');
+		canvas.width = 300
+		canvas.height = 300
 
-	context.fillStyle = 'rgb(63, 169, 245)';
-	context.fillRect(50, 50, 100, 100);
-	context.globalCompositeOperation = "source-atop";
-	context.fillStyle = 'rgb(255, 123, 172)';
-	context.fillRect(100,100,100,100);
-	
-	</script>
-	
-	<!-- 4 -->
-	<script>
-	// destination-atop
-	var canvas = document.getElementById('canvas3');
-	var context = canvas.getContext('2d');
+		context.fillStyle = 'rgb(63, 169, 245)'
+		context.fillRect(50, 50, 100, 100)
+		context.globalCompositeOperation = item.key
+		context.fillStyle = 'rgb(255, 123, 172)'
+		context.fillRect(100, 100, 100, 100)
+		
+		box.appendChild(canvas)
 
-	context.fillStyle = 'rgb(63, 169, 245)';
-	context.fillRect(50, 50, 100, 100);
-	context.globalCompositeOperation = "destination-atop";
-	context.fillStyle = 'rgb(255, 123, 172)';
-	context.fillRect(100,100,100,100);
-
-	</script>
-	
-	<!-- 5 -->
-	<script>
-	// source-in
-	var canvas = document.getElementById('canvas4');
-	var context = canvas.getContext('2d');
-
-	context.fillStyle = 'rgb(63, 169, 245)';
-	context.fillRect(50, 50, 100, 100);
-	context.globalCompositeOperation = "source-in";
-	context.fillStyle = 'rgb(255, 123, 172)';
-	context.fillRect(100,100,100,100);
-	</script>
-	
-	<!-- 6 -->
-	<script>
-	// destination-in
-	var canvas = document.getElementById('canvas5');
-	var context = canvas.getContext('2d');
-
-	context.fillStyle = 'rgb(63, 169, 245)';
-	context.fillRect(50, 50, 100, 100);
-	context.globalCompositeOperation = "destination-in";
-	context.fillStyle = 'rgb(255, 123, 172)';
-	context.fillRect(100,100,100,100);
-	</script>
-
-	<!-- 7 -->
-	<script>
-	// source-out
-	var canvas = document.getElementById('canvas6');
-	var context = canvas.getContext('2d');
-
-	context.fillStyle = 'rgb(63, 169, 245)';
-	context.fillRect(50, 50, 100, 100);
-	context.globalCompositeOperation = "source-out";
-	context.fillStyle = 'rgb(255, 123, 172)';
-	context.fillRect(100,100,100,100);
-	</script>
-
-	<!-- 8 -->
-	<script>
-	// destination-out
-	var canvas = document.getElementById('canvas7');
-	var context = canvas.getContext('2d');
-
-	context.fillStyle = 'rgb(63, 169, 245)';
-	context.fillRect(50, 50, 100, 100);
-	context.globalCompositeOperation = "destination-out";
-	context.fillStyle = 'rgb(255, 123, 172)';
-	context.fillRect(100,100,100,100);
-	</script>
-	
-	<!-- 9 -->
-	<script>
-	// lighter
-	var canvas = document.getElementById('canvas8');
-	var context = canvas.getContext('2d');
-
-	context.fillStyle = 'rgb(63, 169, 245)';
-	context.fillRect(50, 50, 100, 100);
-	context.globalCompositeOperation = "lighter";
-	context.fillStyle = 'rgb(255, 123, 172)';
-	context.fillRect(100,100,100,100);
-	</script>
-	
-	<!-- 10 -->
-	<script>
-	// lighter
-	var canvas = document.getElementById('canvas9');
-	var context = canvas.getContext('2d');
-
-	context.fillStyle = 'rgb(63, 169, 245)';
-	context.fillRect(50, 50, 100, 100);
-	context.globalCompositeOperation = "copy";
-	context.fillStyle = 'rgb(255, 123, 172)';
-	context.fillRect(100,100,100,100);
-	</script>
-
-	<!-- 11 -->
-	<script>
-	// xor
-	var canvas = document.getElementById('canvas10');
-	var context = canvas.getContext('2d');
-
-	context.fillStyle = 'rgb(63, 169, 245)';
-	context.fillRect(50, 50, 100, 100);
-	context.globalCompositeOperation = "xor";
-	context.fillStyle = 'rgb(255, 123, 172)';
-	context.fillRect(100,100,100,100);
+		document.body.appendChild(box)
+	})
 	</script>
 </body>
 </html>
