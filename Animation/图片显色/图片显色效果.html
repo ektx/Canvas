@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>图片显色效果</title>
+</head>
+<body>
+    <canvas width="400px" height="250px"></canvas>
+    <script>
+        let canvas = document.querySelector('canvas')
+        let context = canvas.getContext('2d')
+        // 保存图片路径的数组
+        let urlArr = ["./img.jpg", "point.png"]
+        // imgArr 保存加载后的图片的数组，imgArr中保存的是真实的图片
+		// loadImg 函数用来加载 urlArr 中所有的图片
+		// 并返回一个保存所有图片的数组
+        let imgArr = loadImg(urlArr)
+        // 用于限制点击事件，防止多次绘制
+        let flag = false
+
+        function loadImg (urlArr) {
+            let index = 0
+            let res = []
+
+            load(urlArr[index])
+
+            function load(url) {
+                if (index == urlArr.length) {
+                    init()
+                    return
+                }
+
+                let img = new Image()
+                img.src = url
+
+                img.onload = next
+                img.onerror = function () {
+                    console.log(res[index] + '加载失败')
+                    next()
+                }
+
+                function next() {
+                    res[index] = img
+                    load(urlArr[++index])
+                }
+            }
+
+            return res
+        }
+
+        function init () {
+            // 先在canvas上画黑白的图片，然后再设置背景是彩色的图片
+			// 避免先显示出彩色图片，再显示出黑白的图片
+            context.globalCompositeOperation = 'source-over'
+            context.drawImage(imgArr[0], 0, 0, 400, 250)
+            canvas.style.backgroundSize = "100% 100%"
+
+            flag = true
+
+            canvas.onclick = diffusion
+        }
+
+        let width = 0
+        let speed = 8
+
+        function diffusion (e) {
+            if (flag) {
+                flag = false
+                context.globalCompositeOperation = 'destination-out'
+                window.requestAnimationFrame(draw)
+
+                function draw () {
+                    // 这里不一定需要是 1800 ，但必须是一个足够大的数，可以扩散出整张背景图
+                    if (width > 1800) {
+                        flag = true
+                        return
+                    }
+
+                    width += speed
+
+                    let x = e.layerX
+                    let y = e.layerY
+
+                    context.drawImage(imgArr[1], x - (width/2), y - (width/2), width, width)
+                    window.requestAnimationFrame(draw)
+                }
+            }
+        }
+    </script>
+</body>
+</html>
