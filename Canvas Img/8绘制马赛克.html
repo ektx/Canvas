@@ -3,35 +3,46 @@
 <head>
 	<meta charset="utf-8">
 	<title>canvas 绘制简单图像</title>
+</head>
+<body>
+<div>
+	<h3>绘制简单图像</h3>
+	<canvas id="canvas" width="300" height="300"></canvas>
+</div>
+
+<div>
+	<h3>随机绘制像素点颜色</h3>
+	<canvas id="canvas2" width="300" height="300"> </canvas>
+
 	<script type="text/javascript">
 	window.addEventListener('DOMContentLoaded', function() {
-		var canvas = document.getElementById('canvas');
-		var context = canvas.getContext('2d');
+		let canvas = document.getElementById('canvas');
+		let context = canvas.getContext('2d');
 
 		// 调制绘制大小
-		var imageData = context.createImageData(300,300);
-		var pixels = imageData.data;
+		let imageData = context.createImageData(300,300);
+		let pixels = imageData.data;
 
 		// 调制马赛克的数量
-		var numTileRows = 16;
-		var numTileCols = 16;
+		let numTileRows = 16;
+		let numTileCols = 16;
 
 		// 计算每个块的大小
-		var tileWidth = imageData.width/numTileCols;
-		var tileHeight = imageData.height/numTileRows;
+		let tileWidth = imageData.width/numTileCols;
+		let tileHeight = imageData.height/numTileRows;
 
-		for (var r =0; r < numTileRows; r++) {
-			for (var c = 0; c < numTileCols; c++) {
-				var red = Math.floor(Math.random() * 255);
-				var green = Math.floor(Math.random() * 255);
-				var blue = Math.floor(Math.random() * 255);
+		for (let r =0; r < numTileRows; r++) {
+			for (let c = 0; c < numTileCols; c++) {
+				let red = Math.floor(Math.random() * 255);
+				let green = Math.floor(Math.random() * 255);
+				let blue = Math.floor(Math.random() * 255);
 
-				for (var tr = 0; tr < tileHeight; tr++) {
-					for (var tc = 0; tc < tileWidth; tc++) {
-						var trueX = (c * tileWidth) + tc;
-						var trueY = (r * tileHeight) + tr;
+				for (let tr = 0; tr < tileHeight; tr++) {
+					for (let tc = 0; tc < tileWidth; tc++) {
+						let trueX = (c * tileWidth) + tc;
+						let trueY = (r * tileHeight) + tr;
 
-						var pos = (trueY * (imageData.width * 4)) + (trueX * 4);
+						let pos = (trueY * (imageData.width * 4)) + (trueX * 4);
 
 						pixels[pos] = red;
 						pixels[pos + 1] = green;
@@ -45,18 +56,18 @@
 		context.putImageData(imageData, 0, 0);
 
 
-		var canvas2 = document.getElementById('canvas2');
-		var context2 = canvas2.getContext('2d');
+		let canvas2 = document.getElementById('canvas2');
+		let context2 = canvas2.getContext('2d');
 
 		// 调制绘制大小
-		var imageData2 = context2.createImageData(300,300);
-		var pixels2 = imageData2.data;
+		let imageData2 = context2.createImageData(300,300);
+		let pixels2 = imageData2.data;
 		// 统计所有像素点
-		var numPixels2 = imageData2.width * imageData2.height;
+		let numPixels2 = imageData2.width * imageData2.height;
 
 		// 循环所有像素
 		// Math.random 可以产生0到1之间的随机小数
-		for(var i = 0; i < numPixels2; i++) {
+		for(let i = 0; i < numPixels2; i++) {
 			pixels2[i*4] = Math.floor(Math.random() * 255); // red
 			pixels2[i*4 + 1] = Math.floor(Math.random() * 255); // gree
 			pixels2[i*4 + 2] = Math.floor(Math.random() * 255); // blue
@@ -69,21 +80,6 @@
 
 	});
 	</script>
-</head>
-<body>
-<div>
-	<h3>绘制简单图像</h3>
-	<canvas id="canvas" width="300" height="300">
-		
-	</canvas>
-</div>
-
-<div>
-	<h3>随机绘制像素点颜色</h3>
-	<canvas id="canvas2" width="300" height="300">
-		
-	</canvas>
-
 </div>
 </body>
 </html>
