@@ -3,12 +3,31 @@
 <head>
 	<meta charset="utf-8">
 	<title>canvas 访问像素颜色</title>
+	<style>
+	#color-box {
+		width: 30px;
+		height: 30px;
+	}
+	</style>
+</head>
+<body>
+	<div>
+		<h3>访问像素颜色</h3>
+		<p>getImageData(x(开始位置x), y(开始位置y), width, height)</p>
+		<p>RGB color:<span class="color"></span></p>
+		<p>HEX color:<span id="color"></span></p>
+		<p id="color-box"></p>
+		<canvas id="canvas" width="300" height="300"></canvas>
+	</div>
+<!-- 色彩相关阅读 -->
+<!-- http://zh.wikipedia.org/wiki/HSL%E5%92%8CHSV%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4 -->
 	<script type="text/javascript">
 	window.addEventListener('DOMContentLoaded', function() {
-		var canvas = document.getElementById('canvas');
-		var context = canvas.getContext('2d');
+		let canvas = document.getElementById('canvas');
+		let context = canvas.getContext('2d')
+		let intColor = document.querySelector('#color-box')
 
-		var _img = new Image();
+		let _img = new Image();
 		_img.src = '龙猫.jpg';
 
 		_img.onload = function() {
@@ -16,47 +35,21 @@
 		};
 
 		canvas.onmousemove = function(e) {
-
-			var canvasOffset_left = this.offsetLeft;
-			var canvasOffset_top = this.offsetTop;
-			var canvasX = Math.floor(e.pageX - canvasOffset_left);
-			var canvasY = Math.floor(e.pageY - canvasOffset_top);
-
-			console.log(canvasX+'; '+canvasY);
+			let canvasX = e.layerX
+			let canvasY = e.layerY
 
 			// getImageData(x, y, width, height)
-			var imageData = context.getImageData(canvasX, canvasY, 1, 1);
-			var pixel = imageData.data;
-			var pixelColor = "rgba(" + pixel[0] + ", " + pixel[1] + ", " + pixel[2] + ", " + pixel[3] + ")";
+			let imageData = context.getImageData(canvasX, canvasY, 1, 1);
+			let pixel = imageData.data;
+			let pixelColor = "rgba(" + pixel[0] + ", " + pixel[1] + ", " + pixel[2] + ", " + pixel[3] + ")";
 			// 将值以16位方位显示组成hex
-			var hexcolor = "#"+ pixel[0].toString(16) + pixel[1].toString(16) + pixel[2].toString(16);
+			let hexcolor = "#"+ pixel[0].toString(16) + pixel[1].toString(16) + pixel[2].toString(16);
 
-			document.body.style.backgroundColor = pixelColor;
 			document.querySelector('.color').innerText = pixelColor;
-			document.querySelector('#color').innerText = hexcolor;
-
-			// 如果背景色过深的话，让文字是白色
-			if((pixel[0] < 70) || (pixel[1] < 70) || (pixel[2] < 70)) {
-				document.body.style.color = '#fff';
-			} else {
-				document.body.style.color = '#000';
-			}
-
-		};
-	});
+			document.querySelector('#color').innerText = hexcolor
+			intColor.style.backgroundColor = pixelColor
+		}
+	})
 	</script>
-</head>
-<body>
-<div>
-	<h3>访问像素颜色</h3>
-	<p>getImageData(x(开始位置x), y(开始位置y), width, height)</p>
-	<p>RGB color:<span class="color"></span></p>
-	<p>HEX color:<span id="color"></span></p>
-	<canvas id="canvas" width="300" height="300">
-		
-	</canvas>
-</div>
-<!-- 色彩相关阅读 -->
-<!-- http://zh.wikipedia.org/wiki/HSL%E5%92%8CHSV%E8%89%B2%E5%BD%A9%E7%A9%BA%E9%97%B4 -->
 </body>
 </html>
