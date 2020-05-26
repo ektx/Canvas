@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Line</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    canvas {
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <canvas></canvas>
+  <script>
+    let canvas = document.querySelector('canvas')
+    let ctx = canvas.getContext('2d')
+    // 获取窗口的高、宽与DPI
+    let { innerHeight, innerWidth, devicePixelRatio } = window
+
+    let from = {
+      x: 100,
+      y: 100
+    }
+    let to = {
+      x: 600,
+      y: 600
+    }
+
+    canvas.width = innerWidth * devicePixelRatio
+    canvas.height = innerHeight * devicePixelRatio
+    ctx.save()
+
+    ctx.beginPath()
+    ctx.moveTo(100, 100)
+    ctx.lineTo(700, 100)
+    ctx.closePath()
+    ctx.stroke()
+
+    ctx.beginPath()
+    ctx.fillStyle = '#333'
+    ctx.arc(from.x, from.y, 5, 0, Math.PI * 2, false)
+    ctx.arc(to.x, to.y, 5, 0, Math.PI * 2, false)
+    ctx.closePath()
+    ctx.fill()
+    ctx.restore()
+
+    let dx = 600 - 100
+    let dy = 600 - 100
+    let angle = Math.atan2(dy, dx) 
+    console.log('角度', angle * 180 / Math.PI)
+
+    let radius = 50
+
+    // let x = 100 + Math.sin(angle) * radius
+    // let y = 100 + Math.cos(angle) * radius
+    let {start, end } = getConnectorPoints(from, to, 50)
+    let { x: sx, y: sy } = start
+    let { x: ex, y: ey } = end
+
+    ctx.save()
+    ctx.beginPath()
+    ctx.fillStyle = '#f00'
+    ctx.arc(sx, sy, 10, 0, Math.PI * 2, false)
+    ctx.arc(ex, ey, 10, 0, Math.PI * 2, false)
+    ctx.fill()
+    ctx.closePath()
+    ctx.restore()
+
+    ctx.save()
+    ctx.beginPath()
+    ctx.moveTo(sx, sy)
+    ctx.lineTo(ex, ey)
+    ctx.lineWidth = 2
+    ctx.stroke()
+    ctx.closePath()
+    ctx.restore()
+    // ctx.beginPath()
+    // ctx.moveTo(150, 100)
+    // // ctx.arcTo(0, 100, 200, 200, 50)
+    // // ctx.quadraticCurveTo()
+    // ctx.stroke()
+
+    function getConnectorPoints(from, to, radius = 0) {
+      let dx = to.x - from.x
+      let dy = to.y - from.y
+      let angle = Math.atan2(dy, dx)
+
+      return {
+        start: {
+          x: from.x + Math.sin(angle) * radius,
+          y: from.y + Math.cos(angle) * radius
+        },
+        end: {
+          x: to.x - Math.cos(angle) * radius,
+          y: to.y - Math.sin(angle) * radius
+        }
+      }
+    }
+  </script>
+</body>
+</html>
