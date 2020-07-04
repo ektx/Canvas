@@ -11,12 +11,15 @@
 	var canvas = document.getElementById('canvas');
 	var ctx = canvas.getContext("2d");
 
-	ctx.fillStyle = "#ff0";
-	ctx.beginPath();
-	ctx.moveTo(5, 0);
-	ctx.arcTo(50, 0, 50, 50, 50);
-	// ctx.arcTo(0, 50, 50, 0, 50);
-	// ctx.closePath();
+	ctx.moveTo(10, 10);
+	// ctx.arcTo(x1,y1,x2,y2,r)
+	ctx.arcTo(60, 10, 60, 60, 50);
+
+	ctx.moveTo(165, 10)
+	ctx.arc(160, 10, 5, 0, Math.PI * 2, false)
+
+	ctx.moveTo(160+40, 10)
+	ctx.arcTo(160, 10, 160, 50, 40);
 	ctx.stroke();
 </script>
 </html>
